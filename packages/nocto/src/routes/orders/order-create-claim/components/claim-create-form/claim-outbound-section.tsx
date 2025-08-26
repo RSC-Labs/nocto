@@ -24,13 +24,14 @@ import {
   useRemoveClaimOutboundItem,
   useUpdateClaimOutboundItems,
 } from "../../../../../hooks/api/claims"
-import { useShippingOptions } from "../../../../../hooks/api/shipping-options"
 import { sdk } from "../../../../../lib/client"
 import { OutboundShippingPlaceholder } from "../../../common/placeholders"
 import { AddClaimOutboundItemsTable } from "../add-claim-outbound-items-table"
 import { ClaimOutboundItem } from "./claim-outbound-item"
 import { ItemPlaceholder } from "./item-placeholder"
 import { CreateClaimSchemaType } from "./schema"
+import { useOrderShippingOptions } from "../../../../../hooks/api/orders"
+import { getFormattedShippingOptionLocationName } from "../../../../../lib/shipping-options"
 
 type ClaimOutboundSectionProps = {
   order: AdminOrder
@@ -58,16 +59,12 @@ export const ClaimOutboundSection = ({
   /**
    * HOOKS
    */
-  const { shipping_options = [] } = useShippingOptions({
-    limit: 999,
-    fields: "*prices,+service_zone.fulfillment_set.location.id",
-  })
+  const { shipping_options = [] } = useOrderShippingOptions(order.id)
 
+  // TODO: filter in the API when boolean filter is supported and fulfillment module support partial rule SO filtering
   const outboundShippingOptions = shipping_options.filter(
-    (shippingOption) =>
-      !!shippingOption.rules.find(
-        (r) => r.attribute === "is_return" && r.value === "false"
-      )
+    (so) =>
+      !so.rules?.find((r) => r.attribute === "is_return" && r.value === "true")
   )
 
   const { mutateAsync: addOutboundShipping } = useAddClaimOutboundShipping(
@@ -415,7 +412,7 @@ export const ClaimOutboundSection = ({
                         }}
                         {...field}
                         options={outboundShippingOptions.map((so) => ({
-                          label: so.name,
+                          label: `${so.name} (${getFormattedShippingOptionLocationName(so)})`,
                           value: so.id,
                         }))}
                         disabled={!outboundShippingOptions.length}

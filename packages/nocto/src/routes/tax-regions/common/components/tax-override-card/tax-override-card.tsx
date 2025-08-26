@@ -24,6 +24,7 @@ import { useProducts } from "../../../../../hooks/api/products"
 import { formatPercentage } from "../../../../../lib/percentage-helpers"
 import { TaxRateRuleReferenceType } from "../../constants"
 import { useDeleteTaxRateAction } from "../../hooks"
+import { useShippingOptions } from "../../../../../hooks/api"
 
 interface TaxOverrideCardProps extends ComponentPropsWithoutRef<"div"> {
   taxRate: HttpTypes.AdminTaxRate
@@ -201,6 +202,9 @@ const ReferenceBadge = ({
     case TaxRateRuleReferenceType.PRODUCT_TYPE:
       label = t("taxRegions.fields.targets.tags.productType")
       break
+    case TaxRateRuleReferenceType.SHIPPING_OPTION:
+      label = t("taxRegions.fields.targets.tags.shippingOption")
+      break
     // case TaxRateRuleReferenceType.CUSTOMER_GROUP:
     //   label = t("taxRegions.fields.targets.tags.customerGroup")
     //   break
@@ -303,6 +307,16 @@ const useReferenceValues = (
     }
   )
 
+  const shippingOptions = useShippingOptions(
+    {
+      id: ids,
+      limit: 10,
+    },
+    {
+      enabled:
+        !!ids.length && type === TaxRateRuleReferenceType.SHIPPING_OPTION,
+    }
+  )
   // const collections = useCollections(
   //   {
   //     id: ids,
@@ -357,6 +371,17 @@ const useReferenceValues = (
             : 0,
         isError: productTypes.isError,
         error: productTypes.error,
+      }
+    case TaxRateRuleReferenceType.SHIPPING_OPTION:
+      return {
+        labels: shippingOptions.shipping_options?.map((option) => option.name),
+        isPending: shippingOptions.isPending,
+        additional: shippingOptions.count
+          ? shippingOptions.count -
+            (shippingOptions.shipping_options?.length || 0)
+          : 0,
+        isError: shippingOptions.isError,
+        error: shippingOptions.error,
       }
     // case TaxRateRuleReferenceType.PRODUCT_COLLECTION:
     //   return {

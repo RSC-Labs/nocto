@@ -129,18 +129,8 @@ export const AddCountriesForm = ({ region }: AddCountriesFormProps) => {
         onSubmit={handleSubmit}
         className="flex h-full flex-col overflow-hidden"
       >
-        <RouteFocusModal.Header>
-          <div className="flex items-center justify-end gap-x-2">
-            <RouteFocusModal.Close asChild>
-              <Button size="small" variant="secondary">
-                {t("actions.cancel")}
-              </Button>
-            </RouteFocusModal.Close>
-            <Button size="small" isLoading={isLoading} type="submit">
-              {t("actions.add")}
-            </Button>
-          </div>
-        </RouteFocusModal.Header>
+        <RouteFocusModal.Header />
+
         <RouteFocusModal.Body className="overflow-hidden">
           <_DataTable
             table={table}
@@ -158,6 +148,16 @@ export const AddCountriesForm = ({ region }: AddCountriesFormProps) => {
             prefix={PREFIX}
           />
         </RouteFocusModal.Body>
+        <RouteFocusModal.Footer>
+          <RouteFocusModal.Close asChild>
+            <Button size="small" variant="secondary">
+              {t("actions.cancel")}
+            </Button>
+          </RouteFocusModal.Close>
+          <Button size="small" isLoading={isLoading} type="submit">
+            {t("actions.add")}
+          </Button>
+        </RouteFocusModal.Footer>
       </KeyboundForm>
     </RouteFocusModal.Form>
   )

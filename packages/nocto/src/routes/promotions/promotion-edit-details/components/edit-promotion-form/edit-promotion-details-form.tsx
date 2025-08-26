@@ -1,13 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AdminPromotion } from "@medusajs/types"
-import {
-  Button,
-  CurrencyInput,
-  Input,
-  RadioGroup,
-  Switch,
-  Text,
-} from "@medusajs/ui"
+import { Button, CurrencyInput, Input, RadioGroup, Text } from "@medusajs/ui"
 import { useForm, useWatch } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { useEffect } from "react"
@@ -33,6 +26,7 @@ const EditPromotionSchema = zod.object({
   value_type: zod.enum(["fixed", "percentage"]),
   value: zod.number(),
   allocation: zod.enum(["each", "across"]),
+  target_type: zod.enum(["order", "shipping_methods", "items"]),
 })
 
 export const EditPromotionDetailsForm = ({
@@ -50,6 +44,7 @@ export const EditPromotionDetailsForm = ({
       value: promotion.application_method!.value,
       allocation: promotion.application_method!.allocation,
       value_type: promotion.application_method!.type,
+      target_type: promotion.application_method!.target_type,
     },
     resolver: zodResolver(EditPromotionSchema),
   })
@@ -223,128 +218,139 @@ export const EditPromotionDetailsForm = ({
               </Text>
             </div>
 
-            <Form.Field
-              control={form.control}
-              name="value_type"
-              render={({ field }) => {
-                return (
-                  <Form.Item>
-                    <Form.Label>{t("promotions.fields.value_type")}</Form.Label>
-                    <Form.Control>
-                      <RadioGroup
-                        className="flex-col gap-y-3"
-                        {...field}
-                        onValueChange={field.onChange}
-                      >
-                        <RadioGroup.ChoiceBox
-                          value={"fixed"}
-                          label={t("promotions.form.value_type.fixed.title")}
-                          description={t(
-                            "promotions.form.value_type.fixed.description"
-                          )}
-                        />
+            {promotion.application_method?.target_type !==
+              "shipping_methods" && (
+              <>
+                <Form.Field
+                  control={form.control}
+                  name="value_type"
+                  render={({ field }) => {
+                    return (
+                      <Form.Item>
+                        <Form.Label>
+                          {t("promotions.fields.value_type")}
+                        </Form.Label>
+                        <Form.Control>
+                          <RadioGroup
+                            className="flex-col gap-y-3"
+                            {...field}
+                            onValueChange={field.onChange}
+                          >
+                            <RadioGroup.ChoiceBox
+                              value={"fixed"}
+                              label={t(
+                                "promotions.form.value_type.fixed.title"
+                              )}
+                              description={t(
+                                "promotions.form.value_type.fixed.description"
+                              )}
+                            />
 
-                        <RadioGroup.ChoiceBox
-                          value={"percentage"}
-                          label={t(
-                            "promotions.form.value_type.percentage.title"
-                          )}
-                          description={t(
-                            "promotions.form.value_type.percentage.description"
-                          )}
-                        />
-                      </RadioGroup>
-                    </Form.Control>
-                    <Form.ErrorMessage />
-                  </Form.Item>
-                )
-              }}
-            />
+                            <RadioGroup.ChoiceBox
+                              value={"percentage"}
+                              label={t(
+                                "promotions.form.value_type.percentage.title"
+                              )}
+                              description={t(
+                                "promotions.form.value_type.percentage.description"
+                              )}
+                            />
+                          </RadioGroup>
+                        </Form.Control>
+                        <Form.ErrorMessage />
+                      </Form.Item>
+                    )
+                  }}
+                />
+                <Form.Field
+                  control={form.control}
+                  name="value"
+                  render={({ field: { onChange, ...field } }) => {
+                    const currencyCode =
+                      promotion.application_method?.currency_code ?? "USD"
 
-            <Form.Field
-              control={form.control}
-              name="value"
-              render={({ field: { onChange, ...field } }) => {
-                const currencyCode =
-                  promotion.application_method?.currency_code ?? "USD"
-
-                return (
-                  <Form.Item>
-                    <Form.Label>
-                      {isFixedValueType
-                        ? t("fields.amount")
-                        : t("fields.percentage")}
-                    </Form.Label>
-                    <Form.Control>
-                      {isFixedValueType ? (
-                        <CurrencyInput
-                          min={0}
-                          onValueChange={(val) =>
-                            onChange(val ? parseInt(val) : null)
-                          }
-                          code={currencyCode}
-                          symbol={getCurrencySymbol(currencyCode)}
-                          {...field}
-                          value={field.value}
-                        />
-                      ) : (
-                        <DeprecatedPercentageInput
-                          key="amount"
-                          min={0}
-                          max={100}
-                          {...field}
-                          value={field.value || ""}
-                          onChange={(e) => {
-                            onChange(
-                              e.target.value === ""
-                                ? null
-                                : parseInt(e.target.value)
-                            )
-                          }}
-                        />
-                      )}
-                    </Form.Control>
-                    <Form.ErrorMessage />
-                  </Form.Item>
-                )
-              }}
-            />
-
-            <Form.Field
-              control={form.control}
-              name="allocation"
-              render={({ field }) => {
-                return (
-                  <Form.Item>
-                    <Form.Label>{t("promotions.fields.allocation")}</Form.Label>
-                    <Form.Control>
-                      <RadioGroup
-                        className="flex-col gap-y-3"
-                        {...field}
-                        onValueChange={field.onChange}
-                      >
-                        <RadioGroup.ChoiceBox
-                          value={"each"}
-                          label={t("promotions.form.allocation.each.title")}
-                          description={t(
-                            "promotions.form.allocation.each.description"
+                    return (
+                      <Form.Item>
+                        <Form.Label>
+                          {isFixedValueType
+                            ? t("fields.amount")
+                            : t("fields.percentage")}
+                        </Form.Label>
+                        <Form.Control>
+                          {isFixedValueType ? (
+                            <CurrencyInput
+                              min={0}
+                              onValueChange={(val) =>
+                                onChange(val ? parseInt(val) : null)
+                              }
+                              code={currencyCode}
+                              symbol={getCurrencySymbol(currencyCode)}
+                              {...field}
+                              value={field.value}
+                            />
+                          ) : (
+                            <DeprecatedPercentageInput
+                              key="amount"
+                              min={0}
+                              max={100}
+                              {...field}
+                              value={field.value || ""}
+                              onChange={(e) => {
+                                onChange(
+                                  e.target.value === ""
+                                    ? null
+                                    : parseInt(e.target.value)
+                                )
+                              }}
+                            />
                           )}
-                        />
+                        </Form.Control>
+                        <Form.ErrorMessage />
+                      </Form.Item>
+                    )
+                  }}
+                />
+                <Form.Field
+                  control={form.control}
+                  name="allocation"
+                  render={({ field }) => {
+                    return (
+                      <Form.Item>
+                        <Form.Label>
+                          {t("promotions.fields.allocation")}
+                        </Form.Label>
+                        <Form.Control>
+                          <RadioGroup
+                            className="flex-col gap-y-3"
+                            {...field}
+                            onValueChange={field.onChange}
+                          >
+                            <RadioGroup.ChoiceBox
+                              value={"each"}
+                              label={t("promotions.form.allocation.each.title")}
+                              description={t(
+                                "promotions.form.allocation.each.description"
+                              )}
+                            />
 
-                        <RadioGroup.ChoiceBox
-                          value={"across"}
-                          label={t("promotions.form.allocation.across.title")}
-                          description={t(
-                            "promotions.form.allocation.across.description"
-                          )}
-                        />
-                      </RadioGroup>
-                    </Form.Control>
-                    <Form.ErrorMessage />
-                  </Form.Item>
-                )
-              }}
-            />
+                            <RadioGroup.ChoiceBox
+                              value={"across"}
+                              label={t(
+                                "promotions.form.allocation.across.title"
+                              )}
+                              description={t(
+                                "promotions.form.allocation.across.description"
+                              )}
+                            />
+                          </RadioGroup>
+                        </Form.Control>
+                        <Form.ErrorMessage />
+                      </Form.Item>
+                    )
+                  }}
+                />
+              </>
+            )}
           </div>
         </RouteDrawer.Body>
 

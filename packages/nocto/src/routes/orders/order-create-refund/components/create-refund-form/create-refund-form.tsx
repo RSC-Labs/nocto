@@ -191,8 +191,8 @@ export const CreateRefundForm = ({ order }: CreateRefundFormProps) => {
                         value={field.value.value}
                         onValueChange={(_value, _name, values) =>
                           onChange({
-                            value: values?.value,
-                            float: values?.float || null,
+                            value: values?.value ?? "",
+                            float: values?.float ?? null,
                           })
                         }
                         autoFocus

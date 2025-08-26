@@ -94,8 +94,8 @@ export const EditStoreForm = ({ store }: EditStoreFormProps) => {
 
   return (
     <RouteDrawer.Form form={form}>
-      <KeyboundForm onSubmit={handleSubmit} className="flex h-full flex-col">
-        <RouteDrawer.Body>
+      <KeyboundForm onSubmit={handleSubmit} className="flex h-full flex-col overflow-hidden">
+        <RouteDrawer.Body className="overflow-y-auto">
           <div className="flex flex-col gap-y-8">
             <Form.Field
               control={form.control}

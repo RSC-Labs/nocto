@@ -45,6 +45,7 @@
     "plusCount": "+ {{count}}",
     "plusCountMore": "+ {{count}} więcej",
     "areYouSure": "Czy jesteś pewien?",
+    "areYouSureDescription": "Czy jesteś pewien że chcesz usunąć {{entity}} {{title}}. Tej akcji nie można cofnąć.",
     "noRecordsFound": "Nie znaleziono rekordów",
     "typeToConfirm": "Wpisz {val} aby potwierdzić:",
     "noResultsTitle": "Brak wyników",
@@ -359,6 +360,7 @@
     "backToDashboard": "Powrót do pulpitu"
   },
   "addresses": {
+    "title": "Adresy",
     "shippingAddress": {
       "header": "Adres dostawy",
       "editHeader": "Edytuj adres dostawy",
@@ -843,8 +845,10 @@
     "locationLevels": "Lokalizacje",
     "associatedVariants": "Powiązane warianty",
     "manageLocations": "Zarządzaj lokalizacjami",
+    "manageLocationQuantity": "Zarządzaj ilościami w lokalizacji",
     "deleteWarning": "Zamierzasz usunąć element magazynowy. Tej akcji nie można cofnąć.",
     "editItemDetails": "Edytuj szczegóły elementu",
+    "quantityAcrossLocations": "{{quantity}} w {{locations}} lokalizacjach",
     "create": {
       "title": "Utwórz element magazynowy",
       "details": "Szczegóły",
@@ -967,7 +971,28 @@
     },
     "registered": "Zarejestrowany",
     "guest": "Gość",
-    "hasAccount": "Posiada konto"
+    "hasAccount": "Posiada konto",
+    "addresses": {
+      "title": "Adresy",
+      "fields": {
+        "addressName": "Nazwa adresu",
+        "address1": "Adres 1",
+        "address2": "Adres 2",
+        "city": "Miasto",
+        "province": "Prowincja",
+        "postalCode": "Kod pocztowy",
+        "country": "Kraj",
+        "phone": "Telefon",
+        "company": "Firma",
+        "countryCode": "Kod kraju",
+        "provinceCode": "Kod prowincji"
+      },
+      "create": {
+        "header": "Utwórz adres",
+        "hint": "Utwórz adres dla klienta",
+        "successToast": "Adres został pomyślnie utworzony"
+      }
+    }
   },
   "customerGroups": {
     "domain": "Grupy klientów",
@@ -1023,6 +1048,31 @@
     }
   },
   "orders": {
+    "giftCardsStoreCreditLines": "Karty podarunkowe i linie kredytowe",
+    "creditLines": {
+      "title": "Linie kredytowe",
+      "total": "Suma wszystkich linii kredytowych",
+      "creditOrDebit": "Kredyt / Debet",
+      "createCreditLine": "Utwórz linię kredytową",
+      "createCreditLineSuccess": "Linia kredytowa została pomyślnie utworzona",
+      "createCreditLineError": "Błąd podczas dodawania linii kredytowej",
+      "createCreditLineDescription": "Utwórz linię kredytową na kwotę {{amount}}",
+      "operation": "Operacja",
+      "credit": "Kredyt",
+      "creditDescription": "Dodaj dodatnią sumę do zamówienia",
+      "debit": "Debet",
+      "debitDescription": "Odejmuj ujemną sumę od zamówienia"
+    },
+    "balanceSettlement": {
+      "title": "Rozliczenie salda",
+      "settlementType": "Typ rozliczenia",
+      "settlementTypes": {
+        "paymentMethod": "Metoda płatności",
+        "paymentMethodDescription": "Kwota zwrotu na metodę płatności",
+        "creditLine": "Kredyt sklepowy",
+        "creditLineDescription": "Kwota zwrotu w formie kredytu sklepowego"
+      }
+    },
     "domain": "Zamówienia",
     "claim": "Reklamacja",
     "exchange": "Wymiana",
@@ -1069,6 +1119,7 @@
       "title": "Płatności",
       "isReadyToBeCaptured": "Płatność <0/> jest gotowa do realizacji.",
       "totalPaidByCustomer": "Łączna kwota zapłacona przez klienta",
+      "totalStoreCreditRefunds": "Całkowite zwroty kredytów sklepowych",
       "capture": "Zrealizuj płatność",
       "capture_short": "Zrealizuj",
       "refund": "Zwrot",
@@ -1152,7 +1203,7 @@
       "sendNotificationHint": "Powiadom klienta o zwrocie.",
       "returnTotal": "Suma zwrotu",
       "inboundTotal": "Suma przychodząca",
-      "refundAmount": "Kwota zwrotu",
+      "estDifference": "Zaległa kwota",
       "outstandingAmount": "Pozostało do zapłaty",
       "reason": "Powód",
       "reasonHint": "Wybierz powód, dla którego klient chce zwrócić produkty.",
@@ -1292,7 +1343,8 @@
       "consistsOf": "Składa się z {{num}}x produktów magazynowych",
       "requires": "Wymaga {{num}} na wariant",
       "toast": {
-        "created": "Produkty zostały pomyślnie przydzielone"
+        "created": "Produkty zostały pomyślnie przydzielone",
+        "error": "Wystąpił błąd podczas przydzielania produktów: {{items}}"
       },
       "error": {
         "quantityNotAllocated": "Istnieją nieprzydzielone produkty."
@@ -1682,6 +1734,7 @@
         },
         "provider": "Dostawca realizacji",
         "profile": "Profil wysyłki",
+        "type": "Typ opcji wysyłki",
         "fulfillmentOption": "Opcja realizacji"
       }
     },
@@ -1743,10 +1796,15 @@
       "header": "Utwórz region podatkowy",
       "hint": "Utwórz nowy region podatkowy, aby zdefiniować stawki podatkowe dla konkretnego kraju.",
       "errors": {
-        "rateIsRequired": "Stawka podatku jest wymagana podczas tworzenia domyślnej stawki podatku.",
-        "nameIsRequired": "Nazwa jest wymagana podczas tworzenia domyślnej stawki podatku."
+        "missingCountry": "Kraj jest wymagany",
+        "missingProvider": "Dostawca podatków jest wymagany"
       },
       "successToast": "Region podatkowy został pomyślnie utworzony."
+    },
+    "edit": {
+      "header": "Edytuj region podatkowy",
+      "hint": "Edytuj szczegóły regionu podatkowego",
+      "successToast": "Region podatkowy został pomyślnie zaktualizowany"
     },
     "province": {
       "header": "Prowincje",
@@ -1754,6 +1812,9 @@
         "header": "Utwórz regionalny region podatkowy",
         "hint": "Utwórz nowy region podatkowy, aby zdefiniować stawki podatkowe dla konkretnej prowincji."
       }
+    },
+    "provider": {
+      "header": "Dostawca podatków"
     },
     "state": {
       "header": "Stany",
@@ -1880,6 +1941,7 @@
       },
       "taxRate": "Stawka podatku",
       "taxCode": "Kod podatkowy",
+      "taxProvider": "Dostawca podatków",
       "targets": {
         "label": "Cele",
         "hint": "Wybierz cele, do których będzie miała zastosowanie ta stawka podatku.",
@@ -1991,6 +2053,7 @@
       "allocation": "Przydział",
       "addCondition": "Dodaj warunek",
       "clearAll": "Wyczyść wszystko",
+      "taxInclusive": "Zawiera podatek",
       "amount": {
         "tooltip": "Wybierz kod waluty, aby umożliwić ustawienie kwoty"
       },
@@ -2066,6 +2129,10 @@
           "title": "Bez kampanii",
           "description": "Kontynuuj bez kojarzenia promocji z kampanią"
         }
+      },
+      "taxInclusive": {
+        "title": "Czy promocja zawiera podatki?",
+        "description": "Włącz, aby zastosować promocję po naliczeniu podatków"
       },
       "status": {
         "label": "Status",
@@ -2811,6 +2878,28 @@
       }
     }
   },
+  "shippingOptionTypes": {
+    "domain": "Typy opcji wysyłki",
+    "subtitle": "Zorganizuj opcje wysyłki według typów",
+    "create": {
+      "header": "Utwórz typ opcji wysyłki",
+      "hint": "Utwórz typ opcji wysyłki aby skategoryzować opcje dostawy",
+      "successToast": "Typ opcji wysyłki {{label}} został pomyślnie zaktalizowany"
+    },
+    "edit": {
+      "header": "Edytuj typ opcji wysyłki",
+      "successToast": "Typ opcji wysyłki {{label}} został pomyślnie zaktualizowany"
+    },
+    "delete": {
+      "confirmation": "Jesteś pewien że chcesz usunąć top opcji wysyłki \"{{label}}\". Tej operacji nie da się cofnąć",
+      "successToast": "Typ opcji wysyłki \"{{label}}\" został pomyślnie usunięty"
+    },
+    "fields": {
+      "label": "Nazwa",
+      "code": "Kod",
+      "description": "Opis"
+    }
+  },
   "productTypes": {
     "domain": "Typy produktów",
     "subtitle": "Uporządkuj swoje produkty według typów.",
@@ -2888,6 +2977,8 @@
   },
   "fields": {
     "amount": "Kwota",
+    "reference": "Referencja",
+    "reference_id": "ID referencji",
     "refundAmount": "Kwota zwrotu",
     "name": "Nazwa",
     "default": "Domyślny",
@@ -2974,6 +3065,7 @@
     "account": "Konto",
     "total": "Wartość zamówienia",
     "paidTotal": "Zapłacono",
+    "creditTotal": "Łącznie linie kredytowe",
     "totalExclTax": "Razem bez podatek",
     "subtotal": "Suma częściowa",
     "shipping": "Wysyłka",

@@ -397,8 +397,8 @@ export const ExchangeCreateForm = ({
                       code={order.currency_code}
                       onValueChange={(value, name, values) =>
                         setCustomInboundShippingAmount({
-                          value: values?.value || "",
-                          float: values?.float || null,
+                          value: values?.value ?? "",
+                          float: values?.float ?? null,
                         })
                       }
                       value={customInboundShippingAmount.value}
@@ -470,8 +470,8 @@ export const ExchangeCreateForm = ({
                       code={order.currency_code}
                       onValueChange={(value, name, values) =>
                         setCustomOutboundShippingAmount({
-                          value: values?.value || "",
-                          float: values?.float || null,
+                          value: values?.value ?? "",
+                          float: values?.float ?? null,
                         })
                       }
                       value={customOutboundShippingAmount.value}

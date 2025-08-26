@@ -1,9 +1,13 @@
-import { HttpTypes } from "@medusajs/types"
+import {
+  ApplicationMethodTargetTypeValues,
+  HttpTypes,
+  RuleTypeValues,
+} from "@medusajs/types"
 import { Input } from "@medusajs/ui"
 import { useWatch } from "react-hook-form"
 import { Form } from "../../../../../../components/common/form"
 import { Combobox } from "../../../../../../components/inputs/combobox"
-import { useStore } from "../../../../../../hooks/api/store"
+import { useStore } from "../../../../../../hooks/api"
 import { useComboboxData } from "../../../../../../hooks/use-combobox-data"
 import { sdk } from "../../../../../../lib/client"
 
@@ -18,7 +22,8 @@ type RuleValueFormFieldType = {
   operator: string
   fieldRule: any
   attributes: HttpTypes.AdminRuleAttributeOption[]
-  ruleType: "rules" | "target-rules" | "buy-rules"
+  ruleType: RuleTypeValues
+  applicationMethodTargetType: ApplicationMethodTargetTypeValues | undefined
 }
 
 const buildFilters = (attribute?: string, store?: HttpTypes.AdminStore) => {
@@ -44,6 +49,7 @@ export const RuleValueFormField = ({
   fieldRule,
   attributes,
   ruleType,
+  applicationMethodTargetType,
 }: RuleValueFormFieldType) => {
   const attribute = attributes?.find(
     (attr) => attr.value === fieldRule.attribute
@@ -59,6 +65,7 @@ export const RuleValueFormField = ({
         {
           ...params,
           ...buildFilters(attribute?.id, store!),
+          application_method_target_type: applicationMethodTargetType,
         }
       )
     },

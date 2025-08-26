@@ -4,15 +4,12 @@ import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
 
 import { RouteDrawer } from "../../../components/modals"
-import { useCollections } from "../../../hooks/api/collections"
-import { useCustomerGroups } from "../../../hooks/api/customer-groups"
 import { useProductTypes } from "../../../hooks/api/product-types"
 import { useProducts } from "../../../hooks/api/products"
-import { useProductTags } from "../../../hooks/api/tags"
-import { useTaxRate } from "../../../hooks/api/tax-rates"
 import { TaxRateRuleReferenceType } from "../common/constants"
 import { TaxRegionTaxOverrideEditForm } from "./components/tax-region-tax-override-edit-form"
 import { InitialRuleValues } from "./types"
+import { useShippingOptions, useTaxRate } from "../../../hooks/api"
 
 export const TaxRegionTaxOverrideEdit = () => {
   const { t } = useTranslation()
@@ -59,10 +56,11 @@ const useDefaultRulesValues = (
     [key in TaxRateRuleReferenceType]: string[]
   } = {
     [TaxRateRuleReferenceType.PRODUCT]: [],
-    [TaxRateRuleReferenceType.PRODUCT_COLLECTION]: [],
-    [TaxRateRuleReferenceType.PRODUCT_TAG]: [],
+    // [TaxRateRuleReferenceType.PRODUCT_COLLECTION]: [],
+    // [TaxRateRuleReferenceType.PRODUCT_TAG]: [],
     [TaxRateRuleReferenceType.PRODUCT_TYPE]: [],
-    [TaxRateRuleReferenceType.CUSTOMER_GROUP]: [],
+    [TaxRateRuleReferenceType.SHIPPING_OPTION]: [],
+    // [TaxRateRuleReferenceType.CUSTOMER_GROUP]: [],
   }
 
   rules.forEach((rule) => {
@@ -81,26 +79,26 @@ const useDefaultRulesValues = (
           value: product.id,
         })),
     },
-    {
-      ids: idsByReferenceType[TaxRateRuleReferenceType.PRODUCT_COLLECTION],
-      hook: useCollections,
-      key: TaxRateRuleReferenceType.PRODUCT_COLLECTION,
-      getResult: (result: HttpTypes.AdminCollectionListResponse) =>
-        result.collections.map((collection) => ({
-          label: collection.title!,
-          value: collection.id!,
-        })),
-    },
-    {
-      ids: idsByReferenceType[TaxRateRuleReferenceType.PRODUCT_TAG],
-      hook: useProductTags,
-      key: TaxRateRuleReferenceType.PRODUCT_TAG,
-      getResult: (result: any) =>
-        result.tags.map((tag: any) => ({
-          label: tag.value,
-          value: tag.id,
-        })),
-    },
+    // {
+    //   ids: idsByReferenceType[TaxRateRuleReferenceType.PRODUCT_COLLECTION],
+    //   hook: useCollections,
+    //   key: TaxRateRuleReferenceType.PRODUCT_COLLECTION,
+    //   getResult: (result: HttpTypes.AdminCollectionListResponse) =>
+    //     result.collections.map((collection) => ({
+    //       label: collection.title!,
+    //       value: collection.id!,
+    //     })),
+    // },
+    // {
+    //   ids: idsByReferenceType[TaxRateRuleReferenceType.PRODUCT_TAG],
+    //   hook: useProductTags,
+    //   key: TaxRateRuleReferenceType.PRODUCT_TAG,
+    //   getResult: (result: any) =>
+    //     result.tags.map((tag: any) => ({
+    //       label: tag.value,
+    //       value: tag.id,
+    //     })),
+    // },
     {
       ids: idsByReferenceType[TaxRateRuleReferenceType.PRODUCT_TYPE],
       hook: useProductTypes,
@@ -112,19 +110,29 @@ const useDefaultRulesValues = (
         })),
     },
     {
-      ids: idsByReferenceType[TaxRateRuleReferenceType.CUSTOMER_GROUP],
-      hook: useCustomerGroups,
-      key: TaxRateRuleReferenceType.CUSTOMER_GROUP,
-      getResult: (
-        result: HttpTypes.PaginatedResponse<{
-          customer_groups: HttpTypes.AdminCustomerGroup[]
-        }>
-      ) =>
-        result.customer_groups.map((customerGroup) => ({
-          label: customerGroup.name!,
-          value: customerGroup.id,
+      ids: idsByReferenceType[TaxRateRuleReferenceType.SHIPPING_OPTION],
+      hook: useShippingOptions,
+      key: TaxRateRuleReferenceType.SHIPPING_OPTION,
+      getResult: (result: HttpTypes.AdminShippingOptionListResponse) =>
+        result.shipping_options.map((shippingOption) => ({
+          label: shippingOption.name,
+          value: shippingOption.id,
         })),
     },
+    // {
+    //   ids: idsByReferenceType[TaxRateRuleReferenceType.CUSTOMER_GROUP],
+    //   hook: useCustomerGroups,
+    //   key: TaxRateRuleReferenceType.CUSTOMER_GROUP,
+    //   getResult: (
+    //     result: HttpTypes.PaginatedResponse<{
+    //       customer_groups: HttpTypes.AdminCustomerGroup[]
+    //     }>
+    //   ) =>
+    //     result.customer_groups.map((customerGroup) => ({
+    //       label: customerGroup.name!,
+    //       value: customerGroup.id,
+    //     })),
+    // },
   ]
 
   const queryResults = queries.map(({ ids, hook }) => {

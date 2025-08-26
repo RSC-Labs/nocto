@@ -3,6 +3,7 @@ import {
   Alert,
   Button,
   Checkbox,
+  clx,
   Heading,
   Hint,
   IconButton,
@@ -10,13 +11,12 @@ import {
   Input,
   Label,
   Text,
-  clx,
 } from "@medusajs/ui"
 import {
   Controller,
   FieldArrayWithId,
-  UseFormReturn,
   useFieldArray,
+  UseFormReturn,
   useWatch,
 } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -104,7 +104,9 @@ export const ProductCreateVariantsSection = ({
     const newOptions = [...watchedOptions]
     newOptions[index].values = value
 
-    const permutations = getPermutations(newOptions)
+    const permutations = getPermutations(
+      newOptions.filter(({ values }) => values.length)
+    )
     const oldVariants = [...watchedVariants]
 
     const findMatchingPermutation = (options: Record<string, string>) => {
@@ -157,45 +159,28 @@ export const ProductCreateVariantsSection = ({
 
     const newOptions = [...watchedOptions]
     newOptions.splice(index, 1)
+    const validOptionTitles = new Set(newOptions.map((option) => option.title))
 
     const permutations = getPermutations(newOptions)
     const oldVariants = [...watchedVariants]
 
-    const findMatchingPermutation = (options: Record<string, string>) => {
-      return permutations.find((permutation) =>
-        Object.keys(options).every((key) => options[key] === permutation[key])
+    const newVariants = permutations.reduce((variants, permutation) => {
+      const variant = oldVariants.find(({ options }) =>
+        Object.keys(options)
+          .filter((option) => validOptionTitles.has(option))
+          .every((key) => options[key] === permutation[key])
       )
-    }
 
-    const newVariants = oldVariants.reduce((variants, variant) => {
-      const match = findMatchingPermutation(variant.options)
-
-      if (match) {
+      if (variant) {
         variants.push({
           ...variant,
-          title: getVariantName(match),
-          options: match,
+          title: variant.title,
+          options: permutation,
         })
       }
 
       return variants
     }, [] as typeof oldVariants)
-
-    const usedPermutations = new Set(
-      newVariants.map((variant) => variant.options)
-    )
-    const unusedPermutations = permutations.filter(
-      (permutation) => !usedPermutations.has(permutation)
-    )
-
-    unusedPermutations.forEach((permutation) => {
-      newVariants.push({
-        title: getVariantName(permutation),
-        options: permutation,
-        should_create: false,
-        variant_rank: newVariants.length,
-      })
-    })
 
     form.setValue("variants", newVariants)
   }
@@ -347,10 +332,18 @@ export const ProductCreateVariantsSection = ({
                       )}
                       <ul className="flex flex-col gap-y-4">
                         {options.fields.map((option, index) => {
+                          const hasError =
+                            !!form.formState.errors.options?.[index]
                           return (
                             <li
                               key={option.id}
-                              className="bg-ui-bg-component shadow-elevation-card-rest grid grid-cols-[1fr_28px] items-center gap-1.5 rounded-xl p-1.5"
+                              className={clx(
+                                "bg-ui-bg-component shadow-elevation-card-rest grid grid-cols-[1fr_28px] items-center gap-1.5 rounded-xl p-1.5",
+                                {
+                                  "border-ui-border-error shadow-borders-error":
+                                    hasError,
+                                }
+                              )}
                             >
                               <div className="grid grid-cols-[min-content,1fr] items-center gap-1.5">
                                 <div className="flex items-center px-2 py-1.5">

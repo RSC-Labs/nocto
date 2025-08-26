@@ -9,13 +9,13 @@
     "open": "Offen",
     "close": "Schließen",
     "apply": "Anwenden",
-    "range": "Reichweite",
+    "range": "Bereich",
     "search": "Suchen",
     "of": "von",
     "results": "Ergebnisse",
     "pages": "Seiten",
     "next": "Nächste",
-    "prev": "Vorher",
+    "prev": "Zurück",
     "is": "Ist",
     "timeline": "Zeitleiste",
     "success": "Erfolg",
@@ -32,10 +32,10 @@
     "new": "Neu",
     "modified": "Geändert",
     "added": "Hinzugefügt",
-    "removed": "ENTFERNT",
+    "removed": "Entfernt",
     "admin": "Admin",
     "store": "Shop",
-    "details": "Einzelheiten",
+    "details": "Details",
     "items_one": "{{count}} Artikel",
     "items_other": "{{count}} Artikel",
     "countSelected": "{{count}} ausgewählt",
@@ -98,9 +98,9 @@
   "actions": {
     "save": "Speichern",
     "saveAsDraft": "Als Entwurf speichern",
-    "copy": "Kopie",
+    "copy": "Kopieren",
     "copied": "Kopiert",
-    "duplicate": "Duplikat",
+    "duplicate": "Duplizieren",
     "publish": "Veröffentlichen",
     "create": "Erstellen",
     "delete": "Löschen",
@@ -112,13 +112,13 @@
     "enable": "Aktivieren",
     "disable": "Deaktivieren",
     "undo": "Rückgängig machen",
-    "complete": "Vollständig",
+    "complete": "Abschließen",
     "viewDetails": "Details anzeigen",
     "back": "Zurück",
     "close": "Schließen",
     "showMore": "Mehr anzeigen",
-    "continue": "Weitermachen",
-    "continueWithEmail": "Mit E-Mail anmelden",
+    "continue": "Weiter",
+    "continueWithEmail": "Mit E-Mail fortfahren",
     "idCopiedToClipboard": "ID in die Zwischenablage kopiert",
     "addReason": "Grund hinzufügen",
     "addNote": "Notiz hinzufügen",
@@ -228,7 +228,7 @@
         "theme": {
           "label": "Thema",
           "dark": "Dunkel",
-          "light": "Licht",
+          "light": "Hell",
           "system": "System"
         }
       },
@@ -262,7 +262,7 @@
   },
   "dataGrid": {
     "columns": {
-      "view": "Sicht",
+      "view": "Ansicht",
       "resetToDefault": "Auf Standard zurücksetzen",
       "disabled": "Das Ändern der sichtbaren Spalten ist deaktiviert."
     },
@@ -271,23 +271,23 @@
       "commands": {
         "undo": "Rückgängig machen",
         "redo": "Wiederholen",
-        "copy": "Kopie",
-        "paste": "Paste",
+        "copy": "Kopieren",
+        "paste": "Einfügen",
         "edit": "Bearbeiten",
         "delete": "Löschen",
-        "clear": "Klar",
-        "moveUp": "Bewegen Sie sich nach oben",
-        "moveDown": "Bewegen Sie sich nach unten",
-        "moveLeft": "Bewegen Sie sich nach links",
-        "moveRight": "Bewegen Sie sich nach rechts",
+        "clear": "Leeren",
+        "moveUp": "Nach oben bewegen",
+        "moveDown": "Nach unten bewegen",
+        "moveLeft": "Nach links bewegen",
+        "moveRight": "Nach rechts bewegen",
         "moveTop": "Nach oben verschieben",
-        "moveBottom": "Nach unten bewegen",
-        "selectDown": "Wählen Sie nach unten",
-        "selectUp": "Wählen Sie nach oben",
+        "moveBottom": "Nach unten verschieben",
+        "selectDown": "Nach unten auswählen",
+        "selectUp": "Nach oben auswählen",
         "selectColumnDown": "Spalte nach unten auswählen",
         "selectColumnUp": "Spalte nach oben auswählen",
-        "focusToolbar": "Fokus-Symbolleiste",
-        "focusCancel": "Fokus abbrechen"
+        "focusToolbar": "Symbolleiste fokussieren",
+        "focusCancel": "Fokus aufheben"
       }
     },
     "errors": {
@@ -314,7 +314,7 @@
       "range": "Reichweite",
       "lessThanLabel": "kleiner als {{value}}",
       "greaterThanLabel": "größer als {{value}}",
-      "andLabel": "Und"
+      "andLabel": "und"
     },
     "radio": {
       "yes": "Ja",
@@ -389,7 +389,7 @@
     "edit": {
       "header": "Produkt bearbeiten",
       "description": "Produktdetails bearbeiten.",
-      "successToast": "Produkz {{title}} angepasst."
+      "successToast": "Produkt {{title}} angepasst."
     },
     "create": {
       "title": "Produkt erstellen",
@@ -397,7 +397,7 @@
       "header": "Allgemein",
       "tabs": {
         "details": "Details",
-        "organize": "Organisierren",
+        "organize": "Organisieren",
         "variants": "Varianten",
         "inventory": "Inventar-Kits"
       },
@@ -789,14 +789,14 @@
     "reservation": {
       "header": "Reservierung von {{itemName}}",
       "editItemDetails": "Reservierung bearbeiten",
-      "lineItemId": "Werbebuchungs-ID",
+      "lineItemId": "Position-ID",
       "orderID": "Bestell-ID",
       "description": "Beschreibung",
       "location": "Standort",
       "inStockAtLocation": "An diesem Standort auf Lager",
       "availableAtLocation": "Verfügbar an diesem Standort",
       "reservedAtLocation": "An diesem Standort reserviert",
-      "reservedAmount": "Reservebetrag",
+      "reservedAmount": "Reservierte Menge",
       "create": "Reservierung erstellen",
       "itemToReserve": "Artikel zum Reservieren",
       "quantityPlaceholder": "Wie viel möchten Sie reservieren?",

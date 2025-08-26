@@ -17,7 +17,7 @@ type OrderEditItemProps = {
   currencyCode: string
   locationId?: string
   onItemRemove: (itemId: string) => void
-  itemReservedQuantitiesMap: Map<string, number>
+  reservations: HttpTypes.AdminReservation[]
   form: UseFormReturn<zod.infer<typeof CreateFulfillmentSchema>>
   disabled: boolean
 }
@@ -26,7 +26,7 @@ export function OrderCreateFulfillmentItem({
   item,
   form,
   locationId,
-  itemReservedQuantitiesMap,
+  reservations,
   disabled,
 }: OrderEditItemProps) {
   const { t } = useTranslation()
@@ -35,7 +35,7 @@ export function OrderCreateFulfillmentItem({
     item.product_id,
     item.variant_id,
     {
-      fields: "*inventory,*inventory.location_levels",
+      fields: "*inventory,*inventory.location_levels,*inventory_items",
     },
     {
       enabled: !!item.variant,
@@ -43,28 +43,83 @@ export function OrderCreateFulfillmentItem({
   )
 
   const { availableQuantity, inStockQuantity } = useMemo(() => {
-    if (!variant || !locationId) {
+    if (
+      !variant?.inventory_items?.length ||
+      !variant?.inventory?.length ||
+      !locationId
+    ) {
       return {}
     }
 
-    const { inventory } = variant
+    const { inventory, inventory_items } = variant
 
-    const locationInventory = inventory[0]?.location_levels?.find(
-      (inv) => inv.location_id === locationId
+    const locationHasEveryInventoryItem = inventory.every((i) =>
+      i.location_levels?.find((inv) => inv.location_id === locationId)
     )
 
-    if (!locationInventory) {
+    if (!locationHasEveryInventoryItem) {
       return {}
     }
 
-    const reservedQuantityForItem = itemReservedQuantitiesMap.get(item.id) ?? 0
+    const inventoryItemRequiredQuantityMap = new Map(
+      inventory_items.map((i) => [i.inventory_item_id, i.required_quantity])
+    )
+
+    // since we don't allow split fulifllments only one reservation from inventory kit is enough to calculate avalabel product quantity
+    const reservation = reservations?.find((r) => r.line_item_id === item.id)
+    const iitemRequiredQuantity = inventory_items.find(
+      (i) => i.inventory_item_id === reservation?.inventory_item_id
+    )?.required_quantity
+
+    const reservedQuantityForItem = !reservation
+      ? 0
+      : reservation?.quantity / (iitemRequiredQuantity || 1)
+
+    const locationInventoryLevels = inventory.map((i) => {
+      const level = i.location_levels?.find(
+        (inv) => inv.location_id === locationId
+      )
+
+      const requiredQuantity = inventoryItemRequiredQuantityMap.get(i.id)
+
+      if (!level || !requiredQuantity) {
+        return {
+          availableQuantity: Number.MAX_SAFE_INTEGER,
+          stockedQuantity: Number.MAX_SAFE_INTEGER,
+        }
+      }
+
+      const availableQuantity = level.available_quantity / requiredQuantity
+      const stockedQuantity = level.stocked_quantity / requiredQuantity
+
+      return {
+        availableQuantity,
+        stockedQuantity,
+      }
+    })
+
+    const maxAvailableQuantity = Math.min(
+      ...locationInventoryLevels.map((i) => i.availableQuantity)
+    )
+
+    const maxStockedQuantity = Math.min(
+      ...locationInventoryLevels.map((i) => i.stockedQuantity)
+    )
+
+    if (
+      maxAvailableQuantity === Number.MAX_SAFE_INTEGER ||
+      maxStockedQuantity === Number.MAX_SAFE_INTEGER
+    ) {
+      return {}
+    }
 
     return {
-      availableQuantity:
-        locationInventory.available_quantity + reservedQuantityForItem,
-      inStockQuantity: locationInventory.stocked_quantity,
+      availableQuantity: Math.floor(
+        maxAvailableQuantity + reservedQuantityForItem
+      ),
+      inStockQuantity: Math.floor(maxStockedQuantity),
     }
-  }, [variant, locationId, itemReservedQuantitiesMap])
+  }, [variant, locationId, reservations])
 
   const minValue = 0
   const maxValue = Math.min(
@@ -76,7 +131,7 @@ export function OrderCreateFulfillmentItem({
     <div className="bg-ui-bg-subtle shadow-elevation-card-rest my-2 rounded-xl">
       <div className="flex flex-row items-center">
         {disabled && (
-          <div className="inline-flex items-center ml-4">
+          <div className="ml-4 inline-flex items-center">
             <Tooltip
               content={t("orders.fulfillment.disabledItemTooltip")}
               side="top"
@@ -88,8 +143,8 @@ export function OrderCreateFulfillmentItem({
 
         <div
           className={clx(
-            "flex flex-col flex-1 gap-x-2 gap-y-2 border-b p-3 text-sm sm:flex-row",
-            disabled && "opacity-50 pointer-events-none"
+            "flex flex-1 flex-col gap-x-2 gap-y-2 border-b p-3 text-sm sm:flex-row",
+            disabled && "pointer-events-none opacity-50"
           )}
         >
           <div className="flex flex-1 items-center gap-x-3">

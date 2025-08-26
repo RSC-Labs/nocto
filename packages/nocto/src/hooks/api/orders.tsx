@@ -18,6 +18,7 @@ const _orderKeys = queryKeysFactory(ORDERS_QUERY_KEY) as TQueryKey<"orders"> & {
   preview: (orderId: string) => any
   changes: (orderId: string) => any
   lineItems: (orderId: string) => any
+  shippingOptions: (orderId: string) => any
 }
 
 _orderKeys.preview = function (id: string) {
@@ -30,6 +31,10 @@ _orderKeys.changes = function (id: string) {
 
 _orderKeys.lineItems = function (id: string) {
   return [this.detail(id), "lineItems"]
+}
+
+_orderKeys.shippingOptions = function (id: string) {
+  return [this.detail(id), "shippingOptions"]
 }
 
 export const ordersQueryKeys = _orderKeys
@@ -119,6 +124,28 @@ export const useOrders = (
   const { data, ...rest } = useQuery({
     queryFn: async () => sdk.admin.order.list(query),
     queryKey: ordersQueryKeys.list(query),
+    ...options,
+  })
+
+  return { ...data, ...rest }
+}
+
+export const useOrderShippingOptions = (
+  id: string,
+  query?: HttpTypes.AdminGetOrderShippingOptionList,
+  options?: Omit<
+    UseQueryOptions<
+      { shipping_options: HttpTypes.AdminShippingOption[] },
+      FetchError,
+      { shipping_options: HttpTypes.AdminShippingOption[] },
+      QueryKey
+    >,
+    "queryFn" | "queryKey"
+  >
+) => {
+  const { data, ...rest } = useQuery({
+    queryFn: async () => sdk.admin.order.listShippingOptions(id, query),
+    queryKey: ordersQueryKeys.shippingOptions(id),
     ...options,
   })
 

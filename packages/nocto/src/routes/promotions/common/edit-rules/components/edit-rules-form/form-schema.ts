@@ -24,6 +24,9 @@ export const EditRules = z.object({
       field_type: z.string().optional(),
     })
   ),
+  application_method: z.object({
+    target_type: z.enum(["order", "shipping_methods", "items"]),
+  }),
 })
 
 export type EditRulesType = z.infer<typeof EditRules>

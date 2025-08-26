@@ -148,14 +148,6 @@ export const EditCategoryProductsForm = ({
                 {form.formState.errors.product_ids.message}
               </Hint>
             )}
-            <RouteFocusModal.Close asChild>
-              <Button size="small" variant="secondary">
-                {t("actions.cancel")}
-              </Button>
-            </RouteFocusModal.Close>
-            <Button size="small" type="submit" isLoading={isMutating}>
-              {t("actions.save")}
-            </Button>
           </div>
         </RouteFocusModal.Header>
         <RouteFocusModal.Body className="size-full overflow-hidden">
@@ -178,6 +170,16 @@ export const EditCategoryProductsForm = ({
             search="autofocus"
           />
         </RouteFocusModal.Body>
+        <RouteFocusModal.Footer>
+          <RouteFocusModal.Close asChild>
+            <Button size="small" variant="secondary">
+              {t("actions.cancel")}
+            </Button>
+          </RouteFocusModal.Close>
+          <Button size="small" type="submit" isLoading={isMutating}>
+            {t("actions.save")}
+          </Button>
+        </RouteFocusModal.Footer>
       </KeyboundForm>
     </RouteFocusModal.Form>
   )

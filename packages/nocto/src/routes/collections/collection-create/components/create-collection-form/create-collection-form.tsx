@@ -46,25 +46,13 @@ export const CreateCollectionForm = () => {
 
   return (
     <RouteFocusModal.Form form={form}>
-      <KeyboundForm onSubmit={handleSubmit}>
-        <RouteFocusModal.Header>
-          <div className="flex items-center justify-end gap-x-2">
-            <RouteFocusModal.Close asChild>
-              <Button size="small" variant="secondary">
-                {t("actions.cancel")}
-              </Button>
-            </RouteFocusModal.Close>
-            <Button
-              size="small"
-              variant="primary"
-              type="submit"
-              isLoading={isPending}
-            >
-              {t("actions.create")}
-            </Button>
-          </div>
-        </RouteFocusModal.Header>
-        <RouteFocusModal.Body className="flex flex-col items-center p-16">
+      <KeyboundForm
+        onSubmit={handleSubmit}
+        className="flex h-full flex-col overflow-hidden"
+      >
+        <RouteFocusModal.Header />
+
+        <RouteFocusModal.Body className="flex size-full flex-col items-center p-16">
           <div className="flex w-full max-w-[720px] flex-col gap-y-8">
             <div>
               <Heading>{t("collections.createCollection")}</Heading>
@@ -111,6 +99,21 @@ export const CreateCollectionForm = () => {
             </div>
           </div>
         </RouteFocusModal.Body>
+        <RouteFocusModal.Footer>
+          <RouteFocusModal.Close asChild>
+            <Button size="small" variant="secondary">
+              {t("actions.cancel")}
+            </Button>
+          </RouteFocusModal.Close>
+          <Button
+            size="small"
+            variant="primary"
+            type="submit"
+            isLoading={isPending}
+          >
+            {t("actions.create")}
+          </Button>
+        </RouteFocusModal.Footer>
       </KeyboundForm>
     </RouteFocusModal.Form>
   )

@@ -1305,7 +1305,8 @@
       "consistsOf": "Consists of {{num}}x inventory items",
       "requires": "Requires {{num}} per variant",
       "toast": {
-        "created": "Items successfully allocated"
+        "created": "Items successfully allocated",
+        "error": "Failed to allocate following items: {{items}}"
       },
       "error": {
         "quantityNotAllocated": "There are unallocated items."
@@ -1683,6 +1684,7 @@
         },
         "provider": "Fulfillment provider",
         "profile": "Shipping profile",
+        "type": "Shipping option type",
         "fulfillmentOption": "Fulfillment option"
       }
     },
@@ -1898,7 +1900,8 @@
           "productCollection": "Product collections",
           "productTag": "Product tags",
           "productType": "Product types",
-          "customerGroup": "Customer groups"
+          "customerGroup": "Customer groups",
+          "shippingOption": "Shipping options"
         },
         "operators": {
           "in": "in",
@@ -1910,14 +1913,16 @@
           "productCollection": "Search for product collections",
           "productTag": "Search for product tags",
           "productType": "Search for product types",
-          "customerGroup": "Search for customer groups"
+          "customerGroup": "Search for customer groups",
+          "shippingOption": "Search for shipping options"
         },
         "tags": {
           "product": "Product",
           "productCollection": "Product collection",
           "productTag": "Product tag",
           "productType": "Product type",
-          "customerGroup": "Customer group"
+          "customerGroup": "Customer group",
+          "shippingOption": "Shipping option"
         },
         "modal": {
           "header": "Add targets"
@@ -2005,8 +2010,18 @@
           "description": "Which customer is allowed to use the promotion code? Promotion code can be used by all customers if left untouched."
         },
         "target-rules": {
-          "title": "What items will the promotion be applied to?",
-          "description": "The promotion will be applied to items that match the following conditions."
+          "order": {
+            "title": "What items will the promotion be applied to?",
+            "description": "The promotion will be applied to items that match the following conditions."
+          },
+          "shipping_methods": {
+            "title": "What shipping methods will the promotion be applied to?",
+            "description": "The promotion will be applied to shipping methods that match the following conditions."
+          },
+          "items": {
+            "title": "What items will the promotion be applied to?",
+            "description": "The promotion will be applied to items that match the following conditions."
+          }
         },
         "buy-rules": {
           "title": "What needs to be in the cart to unlock the promotion?",
@@ -2799,6 +2814,28 @@
       }
     }
   },
+  "shippingOptionTypes": {
+    "domain": "Shipping Option Types",
+    "subtitle": "Organize your shipping options into types.",
+    "create": {
+      "header": "Create Shipping Option Type",
+      "hint": "Create a new shipping option type to categorize your shipping options.",
+      "successToast": "Shipping option type {{label}} was successfully created."
+    },
+    "edit": {
+      "header": "Edit Shipping Option Type",
+      "successToast": "Shipping option type {{label}} was successfully updated."
+    },
+    "delete": {
+      "confirmation": "You are about to delete the shipping option type \"{{label}}\". This action cannot be undone.",
+      "successToast": "Shipping option type \"{{label}}\" was successfully deleted."
+    },
+    "fields": {
+      "label": "Label",
+      "code": "Code",
+      "description": "Description"
+    }
+  },
   "productTypes": {
     "domain": "Product Types",
     "subtitle": "Organize your products into types.",
@@ -2900,6 +2937,8 @@
     "categories": "Categories",
     "shippingMethod": "Shipping method",
     "configurations": "Configurations",
+    "enabledInStore": "Enabled in store",
+    "isReturn": "Is return",
     "conditions": "Conditions",
     "category": "Category",
     "collection": "Collection",
@@ -2935,6 +2974,7 @@
     "minutes": "Minutes",
     "totalRedemptions": "Total Redemptions",
     "countries": "Countries",
+    "serviceZone": "Service Zone",
     "paymentProviders": "Payment Providers",
     "refundReason": "Refund Reason",
     "fulfillmentProviders": "Fulfillment Providers",

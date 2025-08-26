@@ -1,18 +1,19 @@
-import { _DataTable } from "../../../../../components/table/data-table"
+import { DataTable } from "../../../../../components/data-table"
 import { useInventoryItemLevels } from "../../../../../hooks/api/inventory"
-import { useDataTable } from "../../../../../hooks/use-data-table"
 import { useLocationListTableColumns } from "./use-location-list-table-columns"
 import { useLocationLevelTableQuery } from "./use-location-list-table-query"
 
 const PAGE_SIZE = 20
+const PREFIX = "invlvl"
 
 export const ItemLocationListTable = ({
   inventory_item_id,
 }: {
   inventory_item_id: string
 }) => {
-  const { searchParams, raw } = useLocationLevelTableQuery({
+  const searchParams = useLocationLevelTableQuery({
     pageSize: PAGE_SIZE,
+    prefix: PREFIX,
   })
 
   const {
@@ -23,33 +24,26 @@ export const ItemLocationListTable = ({
     error,
   } = useInventoryItemLevels(inventory_item_id, {
     ...searchParams,
-    fields: "*stock_locations",
+    fields: "+stock_locations.id,+stock_locations.name",
   })
 
   const columns = useLocationListTableColumns()
-
-  const { table } = useDataTable({
-    data: inventory_levels ?? [],
-    columns,
-    count,
-    enablePagination: true,
-    getRowId: (row) => row.id,
-    pageSize: PAGE_SIZE,
-  })
 
   if (isError) {
     throw error
   }
 
   return (
-    <_DataTable
-      table={table}
+    <DataTable
+      data={inventory_levels ?? []}
       columns={columns}
+      rowCount={count}
       pageSize={PAGE_SIZE}
-      count={count}
+      getRowId={(row) => row.id}
       isLoading={isLoading}
-      pagination
-      queryObject={raw}
+      prefix={PREFIX}
+      layout="fill"
+      enableSearch={false}
     />
   )
 }

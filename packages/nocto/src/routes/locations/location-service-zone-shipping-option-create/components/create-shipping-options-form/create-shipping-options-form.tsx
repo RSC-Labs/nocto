@@ -167,12 +167,7 @@ export function CreateShippingOptionsForm({
             operator: "eq",
           },
         ],
-        type: {
-          // TODO: FETCH TYPES
-          label: "Type label",
-          description: "Type description",
-          code: "type-code",
-        },
+        type_id: data.shipping_option_type_id,
       },
       {
         onSuccess: ({ shipping_option }) => {

@@ -3816,16 +3816,31 @@
             "credit": {
               "type": "string"
             },
+            "creditDescription": {
+              "type": "string"
+            },
             "debit": {
               "type": "string"
             },
             "debitDescription": {
               "type": "string"
-            },
-            "creditDescription": {
-              "type": "string"
             }
-          }
+          },
+          "required": [
+            "title",
+            "total",
+            "creditOrDebit",
+            "createCreditLine",
+            "createCreditLineSuccess",
+            "createCreditLineError",
+            "createCreditLineDescription",
+            "operation",
+            "credit",
+            "creditDescription",
+            "debit",
+            "debitDescription"
+          ],
+          "additionalProperties": false
         },
         "balanceSettlement": {
           "type": "object",
@@ -3851,9 +3866,18 @@
                 "creditLineDescription": {
                   "type": "string"
                 }
-              }
+              },
+              "required": [
+                "paymentMethod",
+                "paymentMethodDescription",
+                "creditLine",
+                "creditLineDescription"
+              ],
+              "additionalProperties": false
             }
-          }
+          },
+          "required": ["title", "settlementType", "settlementTypes"],
+          "additionalProperties": false
         },
         "domain": {
           "type": "string"
@@ -4876,9 +4900,12 @@
               "properties": {
                 "created": {
                   "type": "string"
+                },
+                "error": {
+                  "type": "string"
                 }
               },
-              "required": ["created"],
+              "required": ["created", "error"],
               "additionalProperties": false
             },
             "error": {
@@ -5539,6 +5566,9 @@
         }
       },
       "required": [
+        "giftCardsStoreCreditLines",
+        "creditLines",
+        "balanceSettlement",
         "domain",
         "claim",
         "exchange",
@@ -6308,6 +6338,9 @@
                 "profile": {
                   "type": "string"
                 },
+                "type": {
+                  "type": "string"
+                },
                 "fulfillmentOption": {
                   "type": "string"
                 }
@@ -6318,6 +6351,7 @@
                 "enableInStore",
                 "provider",
                 "profile",
+                "type",
                 "fulfillmentOption"
               ],
               "additionalProperties": false
@@ -7041,6 +7075,9 @@
                     },
                     "customerGroup": {
                       "type": "string"
+                    },
+                    "shippingOption": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -7048,7 +7085,8 @@
                     "productCollection",
                     "productTag",
                     "productType",
-                    "customerGroup"
+                    "customerGroup",
+                    "shippingOption"
                   ],
                   "additionalProperties": false
                 },
@@ -7085,6 +7123,9 @@
                     },
                     "customerGroup": {
                       "type": "string"
+                    },
+                    "shippingOption": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -7092,7 +7133,8 @@
                     "productCollection",
                     "productTag",
                     "productType",
-                    "customerGroup"
+                    "customerGroup",
+                    "shippingOption"
                   ],
                   "additionalProperties": false
                 },
@@ -7113,6 +7155,9 @@
                     },
                     "customerGroup": {
                       "type": "string"
+                    },
+                    "shippingOption": {
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -7120,7 +7165,8 @@
                     "productCollection",
                     "productTag",
                     "productType",
-                    "customerGroup"
+                    "customerGroup",
+                    "shippingOption"
                   ],
                   "additionalProperties": false
                 },
@@ -7470,14 +7516,47 @@
                 "target-rules": {
                   "type": "object",
                   "properties": {
-                    "title": {
-                      "type": "string"
+                    "order": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["title", "description"],
+                      "additionalProperties": false
                     },
-                    "description": {
-                      "type": "string"
+                    "shipping_methods": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["title", "description"],
+                      "additionalProperties": false
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["title", "description"],
+                      "additionalProperties": false
                     }
                   },
-                  "required": ["title", "description"],
+                  "required": ["order", "shipping_methods", "items"],
                   "additionalProperties": false
                 },
                 "buy-rules": {
@@ -10411,6 +10490,77 @@
       ],
       "additionalProperties": false
     },
+    "shippingOptionTypes": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "create": {
+          "type": "object",
+          "properties": {
+            "header": {
+              "type": "string"
+            },
+            "hint": {
+              "type": "string"
+            },
+            "successToast": {
+              "type": "string"
+            }
+          },
+          "required": ["header", "hint", "successToast"],
+          "additionalProperties": false
+        },
+        "edit": {
+          "type": "object",
+          "properties": {
+            "header": {
+              "type": "string"
+            },
+            "successToast": {
+              "type": "string"
+            }
+          },
+          "required": ["header", "successToast"],
+          "additionalProperties": false
+        },
+        "delete": {
+          "type": "object",
+          "properties": {
+            "confirmation": {
+              "type": "string"
+            },
+            "successToast": {
+              "type": "string"
+            }
+          },
+          "required": ["confirmation", "successToast"],
+          "additionalProperties": false
+        },
+        "fields": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "code": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": ["label", "code", "description"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["domain", "subtitle", "create", "edit", "delete", "fields"],
+      "additionalProperties": false
+    },
     "productTypes": {
       "type": "object",
       "properties": {
@@ -10749,6 +10899,12 @@
         "configurations": {
           "type": "string"
         },
+        "enabledInStore": {
+          "type": "string"
+        },
+        "isReturn": {
+          "type": "string"
+        },
         "conditions": {
           "type": "string"
         },
@@ -10852,6 +11008,9 @@
           "type": "string"
         },
         "countries": {
+          "type": "string"
+        },
+        "serviceZone": {
           "type": "string"
         },
         "paymentProviders": {
@@ -11154,6 +11313,8 @@
       },
       "required": [
         "amount",
+        "reference",
+        "reference_id",
         "refundAmount",
         "name",
         "default",
@@ -11176,6 +11337,8 @@
         "categories",
         "shippingMethod",
         "configurations",
+        "enabledInStore",
+        "isReturn",
         "conditions",
         "category",
         "collection",
@@ -11211,6 +11374,7 @@
         "minutes",
         "totalRedemptions",
         "countries",
+        "serviceZone",
         "paymentProviders",
         "refundReason",
         "fulfillmentProviders",
@@ -11240,6 +11404,7 @@
         "account",
         "total",
         "paidTotal",
+        "creditTotal",
         "totalExclTax",
         "subtotal",
         "shipping",
@@ -11422,6 +11587,7 @@
     "invite",
     "resetPassword",
     "workflowExecutions",
+    "shippingOptionTypes",
     "productTypes",
     "productTags",
     "notifications",

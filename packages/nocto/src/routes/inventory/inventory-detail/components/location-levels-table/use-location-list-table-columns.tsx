@@ -1,10 +1,17 @@
 import { InventoryTypes, StockLocationDTO } from "@medusajs/types"
+import { PencilSquare, Trash } from "@medusajs/icons"
 
-import { createColumnHelper } from "@tanstack/react-table"
 import { useMemo } from "react"
+import { createDataTableColumnHelper, toast, usePrompt } from "@medusajs/ui"
 import { useTranslation } from "react-i18next"
 import { PlaceholderCell } from "../../../../../components/table/table-cells/common/placeholder-cell"
-import { LocationActions } from "./location-actions"
+import {
+  inventoryItemLevelsQueryKeys,
+  inventoryItemsQueryKeys,
+} from "../../../../../hooks/api"
+import { sdk } from "../../../../../lib/client"
+import { queryClient } from "../../../../../lib/query-client"
+import { useNavigate } from "react-router-dom"
 
 /**
  * Adds missing properties to the InventoryLevelDTO type.
@@ -16,10 +23,45 @@ interface ExtendedLocationLevel extends InventoryTypes.InventoryLevelDTO {
   available_quantity: number
 }
 
-const columnHelper = createColumnHelper<ExtendedLocationLevel>()
+const columnHelper = createDataTableColumnHelper<ExtendedLocationLevel>()
 
 export const useLocationListTableColumns = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
+  const prompt = usePrompt()
+
+  const handleDelete = async (level: ExtendedLocationLevel) => {
+    const res = await prompt({
+      title: t("general.areYouSure"),
+      description: t("inventory.deleteWarning"),
+      confirmText: t("actions.delete"),
+      cancelText: t("actions.cancel"),
+    })
+
+    if (!res) {
+      return
+    }
+
+    try {
+      await sdk.admin.inventoryItem.deleteLevel(
+        level.inventory_item_id,
+        level.location_id
+      )
+
+      queryClient.invalidateQueries({
+        queryKey: inventoryItemsQueryKeys.lists(),
+      })
+      queryClient.invalidateQueries({
+        queryKey: inventoryItemsQueryKeys.detail(level.inventory_item_id),
+      })
+      queryClient.invalidateQueries({
+        queryKey: inventoryItemLevelsQueryKeys.detail(level.inventory_item_id),
+      })
+    } catch (e) {
+      toast.error(e.message)
+    }
+  }
 
   return useMemo(
     () => [
@@ -54,6 +96,7 @@ export const useLocationListTableColumns = () => {
             </div>
           )
         },
+        enableSorting: true,
       }),
       columnHelper.accessor("stocked_quantity", {
         header: t("fields.inStock"),
@@ -70,6 +113,7 @@ export const useLocationListTableColumns = () => {
             </div>
           )
         },
+        enableSorting: true,
       }),
       columnHelper.accessor("available_quantity", {
         header: t("inventory.available"),
@@ -87,9 +131,31 @@ export const useLocationListTableColumns = () => {
           )
         },
       }),
-      columnHelper.display({
-        id: "actions",
-        cell: ({ row }) => <LocationActions level={row.original} />,
+      columnHelper.action({
+        actions: (ctx) => {
+          const level = ctx.row.original
+          return [
+            [
+              {
+                icon: <PencilSquare />,
+                label: t("actions.edit"),
+
+                onClick: (row) => {
+                  navigate(`locations/${level.location_id}`)
+                },
+              },
+            ],
+            [
+              {
+                icon: <Trash />,
+                label: t("actions.delete"),
+                onClick: () => handleDelete(level),
+                disabled:
+                  level.reserved_quantity > 0 || level.stocked_quantity > 0,
+              },
+            ],
+          ]
+        },
       }),
     ],
     [t]

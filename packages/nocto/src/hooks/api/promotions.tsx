@@ -21,10 +21,15 @@ export const promotionsQueryKeys = {
     ruleType: string,
     query?: HttpTypes.AdminGetPromotionRuleParams
   ) => [PROMOTIONS_QUERY_KEY, id, ruleType, query],
-  listRuleAttributes: (ruleType: string, promotionType?: string) => [
+  listRuleAttributes: (
+    ruleType: string,
+    promotionType?: string,
+    applicationMethodTargetType?: string
+  ) => [
     PROMOTIONS_QUERY_KEY,
     ruleType,
     promotionType,
+    applicationMethodTargetType,
   ],
   listRuleValues: (
     ruleType: string,
@@ -101,6 +106,7 @@ export const usePromotions = (
 export const usePromotionRuleAttributes = (
   ruleType: string,
   promotionType?: string,
+  applicationMethodTargetType?: string,
   options?: Omit<
     UseQueryOptions<
       HttpTypes.AdminRuleAttributeOptionsListResponse,
@@ -112,9 +118,17 @@ export const usePromotionRuleAttributes = (
   >
 ) => {
   const { data, ...rest } = useQuery({
-    queryKey: promotionsQueryKeys.listRuleAttributes(ruleType, promotionType),
+    queryKey: promotionsQueryKeys.listRuleAttributes(
+      ruleType,
+      promotionType,
+      applicationMethodTargetType
+    ),
     queryFn: async () =>
-      sdk.admin.promotion.listRuleAttributes(ruleType, promotionType),
+      sdk.admin.promotion.listRuleAttributes(
+        ruleType,
+        promotionType,
+        applicationMethodTargetType
+      ),
     ...options,
   })
 

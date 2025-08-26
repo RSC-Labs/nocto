@@ -31,10 +31,15 @@ function InventoryItemRow({
 }: InventoryItemRowProps) {
   const { t } = useTranslation()
 
+  const selectedInventoryItemId = useWatch({
+    control: form.control,
+    name: `variants.${variantIndex}.inventory.${inventoryIndex}.inventory_item_id`,
+  })
+
   const items = useComboboxData({
     queryKey: ["inventory_items"],
     defaultValueKey: "id",
-    defaultValue: inventoryItem.inventory_item_id, // prefetch existing inventory items
+    selectedValue: selectedInventoryItemId,
     queryFn: (params) => sdk.admin.inventoryItem.list(params),
     getOptions: (data) =>
       data.inventory_items.map((item) => ({

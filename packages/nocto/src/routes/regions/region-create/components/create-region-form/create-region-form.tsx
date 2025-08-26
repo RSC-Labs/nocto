@@ -186,18 +186,7 @@ export const CreateRegionForm = ({
         className="flex h-full flex-col overflow-hidden"
         onSubmit={handleSubmit}
       >
-        <RouteFocusModal.Header>
-          <div className="flex items-center justify-end gap-x-2">
-            <RouteFocusModal.Close asChild>
-              <Button size="small" variant="secondary">
-                {t("actions.cancel")}
-              </Button>
-            </RouteFocusModal.Close>
-            <Button size="small" type="submit" isLoading={isPendingRegion}>
-              {t("actions.save")}
-            </Button>
-          </div>
-        </RouteFocusModal.Header>
+        <RouteFocusModal.Header />
         <RouteFocusModal.Body className="flex overflow-hidden">
           <div
             className={clx(
@@ -434,6 +423,16 @@ export const CreateRegionForm = ({
             </div>
           </div>
         </RouteFocusModal.Body>
+        <RouteFocusModal.Footer>
+          <RouteFocusModal.Close asChild>
+            <Button size="small" variant="secondary">
+              {t("actions.cancel")}
+            </Button>
+          </RouteFocusModal.Close>
+          <Button size="small" type="submit" isLoading={isPendingRegion}>
+            {t("actions.save")}
+          </Button>
+        </RouteFocusModal.Footer>
       </KeyboundForm>
     </RouteFocusModal.Form>
   )

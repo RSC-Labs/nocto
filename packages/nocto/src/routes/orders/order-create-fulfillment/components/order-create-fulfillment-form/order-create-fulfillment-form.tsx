@@ -15,7 +15,6 @@ import {
 } from "../../../../../components/modals"
 import { KeyboundForm } from "../../../../../components/utilities/keybound-form"
 import { useCreateOrderFulfillment } from "../../../../../hooks/api/orders"
-import { useStockLocations } from "../../../../../hooks/api/stock-locations"
 import { getFulfillableQuantity } from "../../../../../lib/order-item"
 import { CreateFulfillmentSchema } from "./constants"
 import { OrderCreateFulfillmentItem } from "./order-create-fulfillment-item"
@@ -24,6 +23,9 @@ import {
   useShippingOptions,
 } from "../../../../../hooks/api"
 import { getReservationsLimitCount } from "../../../../../lib/orders"
+import { sdk } from "../../../../../lib/client"
+import { useComboboxData } from "../../../../../hooks/use-combobox-data"
+import { Combobox } from "../../../../../components/inputs/combobox"
 
 type OrderCreateFulfillmentFormProps = {
   order: AdminOrder
@@ -45,11 +47,15 @@ export function OrderCreateFulfillmentForm({
     limit: getReservationsLimitCount(order),
   })
 
-  const itemReservedQuantitiesMap = useMemo(
-    () =>
-      new Map((reservations || []).map((r) => [r.line_item_id, r.quantity])),
-    [reservations]
-  )
+  const stockLocations = useComboboxData({
+    queryFn: (params) => sdk.admin.stockLocation.list(params),
+    queryKey: ["stock_locations"],
+    getOptions: (data) =>
+      data.stock_locations.map((location) => ({
+        label: location.name,
+        value: location.id,
+      })),
+  })
 
   const [fulfillableItems, setFulfillableItems] = useState(() =>
     (order.items || []).filter(
@@ -77,8 +83,6 @@ export function OrderCreateFulfillmentForm({
     name: "location_id",
     control: form.control,
   })
-
-  const { stock_locations = [] } = useStockLocations()
 
   const { shipping_options = [], isLoading: isShippingOptionsLoading } =
     useShippingOptions({
@@ -155,7 +159,7 @@ export function OrderCreateFulfillmentForm({
   })
 
   useEffect(() => {
-    if (stock_locations?.length && shipping_options?.length) {
+    if (shipping_options?.length) {
       const initialShippingOptionId =
         order.shipping_methods?.[0]?.shipping_option_id
 
@@ -176,7 +180,7 @@ export function OrderCreateFulfillmentForm({
         } // else -> TODO: what if original shipping option is deleted?
       }
     }
-  }, [stock_locations?.length, shipping_options?.length])
+  }, [shipping_options])
 
   const fulfilledQuantityArray = (order.items || []).map(
     (item) =>
@@ -234,7 +238,7 @@ export function OrderCreateFulfillmentForm({
                   <Form.Field
                     control={form.control}
                     name="location_id"
-                    render={({ field: { onChange, ref, ...field } }) => {
+                    render={({ field: { ...field } }) => {
                       return (
                         <Form.Item>
                           <div className="flex flex-col gap-2 xl:flex-row xl:items-center">
@@ -246,21 +250,15 @@ export function OrderCreateFulfillmentForm({
                             </div>
                             <div className="flex-1">
                               <Form.Control>
-                                <Select onValueChange={onChange} {...field}>
-                                  <Select.Trigger
-                                    className="bg-ui-bg-base"
-                                    ref={ref}
-                                  >
-                                    <Select.Value />
-                                  </Select.Trigger>
-                                  <Select.Content>
-                                    {stock_locations.map((l) => (
-                                      <Select.Item key={l.id} value={l.id}>
-                                        {l.name}
-                                      </Select.Item>
-                                    ))}
-                                  </Select.Content>
-                                </Select>
+                                <Combobox
+                                  {...field}
+                                  options={stockLocations.options}
+                                  searchValue={stockLocations.searchValue}
+                                  onSearchValueChange={
+                                    stockLocations.onSearchValueChange
+                                  }
+                                  disabled={stockLocations.disabled}
+                                />
                               </Form.Control>
                             </div>
                           </div>
@@ -360,9 +358,7 @@ export function OrderCreateFulfillmentForm({
                             disabled={
                               requiresShipping && !isShippingProfileMatching
                             }
-                            itemReservedQuantitiesMap={
-                              itemReservedQuantitiesMap
-                            }
+                            reservations={reservations}
                           />
                         )
                       })}

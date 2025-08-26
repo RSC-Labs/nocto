@@ -40,6 +40,7 @@ export const ProductTagDetail = () => {
         before: getWidgets("product_tag.details.before"),
       }}
       showJSON
+      showMetadata
       data={product_tag}
     >
       <ProductTagGeneralSection productTag={product_tag} />

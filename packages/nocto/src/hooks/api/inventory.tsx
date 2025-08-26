@@ -176,7 +176,10 @@ export const useInventoryItemLevels = (
 ) => {
   const { data, ...rest } = useQuery({
     queryFn: () => sdk.admin.inventoryItem.listLevels(inventoryItemId, query),
-    queryKey: inventoryItemLevelsQueryKeys.detail(inventoryItemId),
+    queryKey: inventoryItemLevelsQueryKeys.list({
+      ...(query || {}),
+      inventoryItemId,
+    }),
     ...options,
   })
 

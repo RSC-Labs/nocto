@@ -13,7 +13,7 @@ export const useReservationTableQuery = ({
     prefix
   )
 
-  const { location_id, created_at, updated_at, quantity, offset, ...rest } = raw
+  const { location_id, created_at, updated_at, order, offset, ...rest } = raw
 
   const searchParams: HttpTypes.AdminGetReservationsParams = {
     limit: pageSize,
@@ -21,6 +21,7 @@ export const useReservationTableQuery = ({
     location_id: location_id,
     created_at: created_at ? JSON.parse(created_at) : undefined,
     updated_at: updated_at ? JSON.parse(updated_at) : undefined,
+    order: order ?? "-created_at",
     ...rest,
   }
 

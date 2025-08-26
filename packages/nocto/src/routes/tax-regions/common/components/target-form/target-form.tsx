@@ -21,6 +21,8 @@ import {
   useProductTags,
   useProductTypes,
   useProducts,
+  useShippingOptions,
+  useStockLocations,
 } from "../../../../../hooks/api"
 import {
   useCollectionTableColumns,
@@ -35,6 +37,7 @@ import {
   useProductTableFilters,
   useProductTagTableFilters,
   useProductTypeTableFilters,
+  useShippingOptionTableFilters,
 } from "../../../../../hooks/table/filters"
 import {
   useCollectionTableQuery,
@@ -42,10 +45,12 @@ import {
   useProductTableQuery,
   useProductTagTableQuery,
   useProductTypeTableQuery,
+  useShippingOptionTableQuery,
 } from "../../../../../hooks/table/query"
 import { useDataTable } from "../../../../../hooks/use-data-table"
 import { TaxRateRuleReferenceType } from "../../constants"
 import { TaxRateRuleReference } from "../../schemas"
+import { useShippingOptionTableColumns } from "../../../../../hooks/table/columns/use-shipping-option-table-columns"
 
 type TargetFormProps = {
   referenceType: TaxRateRuleReferenceType
@@ -110,16 +115,18 @@ type TableProps = {
 
 const Table = ({ referenceType, ...props }: TableProps) => {
   switch (referenceType) {
-    case TaxRateRuleReferenceType.CUSTOMER_GROUP:
-      return <CustomerGroupTable {...props} />
+    // case TaxRateRuleReferenceType.CUSTOMER_GROUP:
+    // return <CustomerGroupTable {...props} />
     case TaxRateRuleReferenceType.PRODUCT:
       return <ProductTable {...props} />
-    case TaxRateRuleReferenceType.PRODUCT_COLLECTION:
-      return <ProductCollectionTable {...props} />
+    // case TaxRateRuleReferenceType.PRODUCT_COLLECTION:
+    // return <ProductCollectionTable {...props} />
     case TaxRateRuleReferenceType.PRODUCT_TYPE:
       return <ProductTypeTable {...props} />
-    case TaxRateRuleReferenceType.PRODUCT_TAG:
-      return <ProductTagTable {...props} />
+    // case TaxRateRuleReferenceType.PRODUCT_TAG:
+    // return <ProductTagTable {...props} />
+    case TaxRateRuleReferenceType.SHIPPING_OPTION:
+      return <ShippingOptionTable {...props} />
     default:
       return null
   }
@@ -638,6 +645,150 @@ const useProductTypeColumns = () => {
   return useMemo(
     () => [
       ptColumnHelper.display({
+        id: "select",
+        header: ({ table }) => {
+          return (
+            <Checkbox
+              checked={
+                table.getIsSomePageRowsSelected()
+                  ? "indeterminate"
+                  : table.getIsAllPageRowsSelected()
+              }
+              onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+              }
+            />
+          )
+        },
+        cell: ({ row }) => {
+          return (
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+            />
+          )
+        },
+      }),
+      ...base,
+    ],
+    [base]
+  )
+}
+
+const PREFIX_SHIPPING_OPTION = "so"
+
+const ShippingOptionTable = ({
+  initialRowState,
+  intermediate,
+  setIntermediate,
+}: TableImplementationProps) => {
+  const { t } = useTranslation()
+
+  const [rowSelection, setRowSelection] =
+    useState<RowSelectionState>(initialRowState)
+
+  useCleanupSearchParams()
+
+  const { searchParams, raw } = useShippingOptionTableQuery({
+    pageSize: PAGE_SIZE,
+    prefix: PREFIX_SHIPPING_OPTION,
+  })
+
+  const { shipping_options, count, isLoading, isError, error } =
+    useShippingOptions(
+      {
+        ...searchParams,
+        fields: "+service_zone.fulfillment_set.location.*",
+      },
+      {
+        placeholderData: keepPreviousData,
+      }
+    )
+
+  const updater: OnChangeFn<RowSelectionState> = (value) => {
+    const state = typeof value === "function" ? value(rowSelection) : value
+    const currentIds = Object.keys(rowSelection)
+
+    const ids = Object.keys(state)
+
+    const newIds = ids.filter((id) => !currentIds.includes(id))
+    const removedIds = currentIds.filter((id) => !ids.includes(id))
+
+    const newShippingOptions =
+      shipping_options
+        ?.filter((p) => newIds.includes(p.id))
+        .map((p) => ({
+          value: p.id,
+          label: p.name,
+        })) || []
+
+    const filteredIntermediate = intermediate.filter(
+      (p) => !removedIds.includes(p.value)
+    )
+
+    setIntermediate([...filteredIntermediate, ...newShippingOptions])
+    setRowSelection(state)
+  }
+
+  const { stock_locations } = useStockLocations({
+    limit: 1000,
+  })
+
+  const filters = useShippingOptionTableFilters(stock_locations || [])
+  const columns = useShippingOptionColumns()
+
+  const { table } = useDataTable({
+    data: shipping_options || [],
+    columns,
+    count,
+    enablePagination: true,
+    enableRowSelection: true,
+    getRowId: (row) => row.id,
+    rowSelection: {
+      state: rowSelection,
+      updater,
+    },
+    pageSize: PAGE_SIZE,
+    prefix: PREFIX_SHIPPING_OPTION,
+  })
+
+  if (isError) {
+    throw error
+  }
+
+  return (
+    <_DataTable
+      table={table}
+      columns={columns}
+      pageSize={PAGE_SIZE}
+      count={count}
+      isLoading={isLoading}
+      filters={filters}
+      orderBy={[
+        { key: "name", label: t("fields.name") },
+        { key: "created_at", label: t("fields.createdAt") },
+        { key: "updated_at", label: t("fields.updatedAt") },
+      ]}
+      layout="fill"
+      pagination
+      search
+      prefix={PREFIX_SHIPPING_OPTION}
+      queryObject={raw}
+    />
+  )
+}
+
+const soColumnHelper = createColumnHelper<HttpTypes.AdminShippingOption>()
+
+const useShippingOptionColumns = () => {
+  const base = useShippingOptionTableColumns()
+
+  return useMemo(
+    () => [
+      soColumnHelper.display({
         id: "select",
         header: ({ table }) => {
           return (

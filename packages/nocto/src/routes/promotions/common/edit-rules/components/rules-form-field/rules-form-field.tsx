@@ -41,7 +41,11 @@ export const RulesFormField = ({
 }: RulesFormFieldType) => {
   const { t } = useTranslation()
   const formData = form.getValues()
-  const { attributes } = usePromotionRuleAttributes(ruleType, formData.type)
+  const { attributes } = usePromotionRuleAttributes(
+    ruleType,
+    formData.type,
+    formData.application_method?.target_type
+  )
 
   const { fields, append, remove, update, replace } = useFieldArray({
     control: form.control,
@@ -61,10 +65,17 @@ export const RulesFormField = ({
     defaultValue: promotion?.application_method?.type,
   })
 
+  const applicationMethodTargetType = useWatch({
+    control: form.control,
+    name: "application_method.target_type",
+    defaultValue: promotion?.application_method?.target_type,
+  })
+
   const query: Record<string, string> = promotionType
     ? {
         promotion_type: promotionType,
         application_method_type: applicationMethodType,
+        application_method_target_type: applicationMethodTargetType,
       }
     : {}
 
@@ -121,14 +132,22 @@ export const RulesFormField = ({
   return (
     <div className="flex flex-col">
       <Heading level="h2" className="mb-2">
-        {t(`promotions.fields.conditions.${ruleType}.title`)}
+        {t(
+          ruleType === "target-rules"
+            ? `promotions.fields.conditions.${ruleType}.${applicationMethodTargetType}.title`
+            : `promotions.fields.conditions.${ruleType}.title`
+        )}
       </Heading>
 
       <Text className="text-ui-fg-subtle txt-small mb-6">
-        {t(`promotions.fields.conditions.${ruleType}.description`)}
+        {t(
+          ruleType === "target-rules"
+            ? `promotions.fields.conditions.${ruleType}.${applicationMethodTargetType}.description`
+            : `promotions.fields.conditions.${ruleType}.description`
+        )}
       </Text>
 
-      {fields.map((fieldRule: any, index) => {
+      {fields.map((fieldRule, index) => {
         const identifier = fieldRule.id
 
         return (
@@ -157,11 +176,23 @@ export const RulesFormField = ({
                         (ao) => ao.id === e
                       )
 
-                      update(index, {
+                      const fieldRuleOverrides: typeof fieldRule = {
                         ...fieldRule,
-                        values: [],
                         disguised: currentAttributeOption?.disguised || false,
-                      })
+                      }
+
+                      if (currentAttributeOption?.operators?.length === 1) {
+                        fieldRuleOverrides.operator =
+                          currentAttributeOption.operators[0].value
+                      }
+
+                      if (fieldRuleOverrides.operator === "eq") {
+                        fieldRuleOverrides.values = ""
+                      } else {
+                        fieldRuleOverrides.values = []
+                      }
+
+                      update(index, fieldRuleOverrides)
                       onChange(e)
                     }
 
@@ -295,6 +326,7 @@ export const RulesFormField = ({
                     fieldRule={fieldRule}
                     attributes={attributes}
                     ruleType={ruleType}
+                    applicationMethodTargetType={applicationMethodTargetType}
                   />
                 </div>
               </div>

@@ -157,14 +157,6 @@ export const AddProductsToCollectionForm = ({
             {form.formState.errors.add && (
               <Hint variant="error">{form.formState.errors.add.message}</Hint>
             )}
-            <RouteFocusModal.Close asChild>
-              <Button size="small" variant="secondary">
-                {t("actions.cancel")}
-              </Button>
-            </RouteFocusModal.Close>
-            <Button size="small" type="submit" isLoading={isMutating}>
-              {t("actions.save")}
-            </Button>
           </div>
         </RouteFocusModal.Header>
         <RouteFocusModal.Body className="size-full overflow-hidden">
@@ -187,6 +179,16 @@ export const AddProductsToCollectionForm = ({
             search="autofocus"
           />
         </RouteFocusModal.Body>
+        <RouteFocusModal.Footer>
+          <RouteFocusModal.Close asChild>
+            <Button size="small" variant="secondary">
+              {t("actions.cancel")}
+            </Button>
+          </RouteFocusModal.Close>
+          <Button size="small" type="submit" isLoading={isMutating}>
+            {t("actions.save")}
+          </Button>
+        </RouteFocusModal.Footer>
       </KeyboundForm>
     </RouteFocusModal.Form>
   )

@@ -28,7 +28,13 @@ export const EditRulesForm = ({
   const [rulesToRemove, setRulesToRemove] = useState([])
 
   const form = useForm<EditRulesType>({
-    defaultValues: { rules: [], type: promotion.type },
+    defaultValues: {
+      rules: [],
+      type: promotion.type,
+      application_method: {
+        target_type: promotion.application_method?.target_type,
+      },
+    },
     resolver: zodResolver(EditRules),
   })
 

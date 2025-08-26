@@ -1,27 +1,18 @@
 import { useTranslation } from "react-i18next"
+import { HttpTypes } from "@medusajs/types"
+
 import { Filter } from "../../../components/table/data-table"
 
-export const useShippingOptionTableFilters = () => {
+export const useShippingOptionTableFilters = (
+  locations: HttpTypes.AdminStockLocation[]
+) => {
   const { t } = useTranslation()
 
-  const isReturnFilter: Filter = {
-    key: "is_return",
-    label: t("fields.type"),
+  const locationFilter: Filter = {
+    key: "stock_location_id",
+    label: t("fields.location"),
     type: "select",
-    options: [
-      { label: t("regions.return"), value: "true" },
-      { label: t("regions.outbound"), value: "false" },
-    ],
-  }
-
-  const isAdminFilter: Filter = {
-    key: "admin_only",
-    label: t("fields.availability"),
-    type: "select",
-    options: [
-      { label: t("general.admin"), value: "true" },
-      { label: t("general.store"), value: "false" },
-    ],
+    options: locations.map((l) => ({ label: l.name, value: l.id })),
   }
 
   const dateFilters: Filter[] = [
@@ -33,7 +24,7 @@ export const useShippingOptionTableFilters = () => {
     type: "date",
   }))
 
-  const filters = [isReturnFilter, isAdminFilter, ...dateFilters]
+  const filters = [locationFilter, ...dateFilters]
 
   return filters
 }

@@ -47,12 +47,10 @@ export const CreateCampaignFormFields = ({ form, fieldScope = "" }) => {
 
     if (isTypeSpend) {
       form.setValue(`campaign.budget.currency_code`, promotionCurrencyValue)
-    }
-
-    if (watchValueType === "usage") {
+    } else {
       form.setValue(`campaign.budget.currency_code`, null)
     }
-  }, [watchValueType])
+  }, [promotionCurrencyValue, isTypeSpend])
 
   if (promotionCurrencyValue) {
     const formCampaignBudget = form.getValues().campaign?.budget

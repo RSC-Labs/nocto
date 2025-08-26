@@ -397,7 +397,9 @@ const Item = ({
 
   const isInventoryManaged = item.variant?.manage_inventory
   const hasInventoryKit =
-    isInventoryManaged && (item.variant?.inventory_items?.length || 0) > 1
+    isInventoryManaged &&
+    ((item.variant?.inventory_items?.length || 0) > 1 ||
+      item.variant?.inventory_items?.some((i) => i.required_quantity > 1))
   const hasUnfulfilledItems = item.quantity - item.detail.fulfilled_quantity > 0
 
   return (

@@ -44,12 +44,12 @@ export function OrderCreateShipmentForm({
 
   const handleSubmit = form.handleSubmit(async (data) => {
     const addedLabels = data.labels
-    .filter((l) => !!l.tracking_number)
-    .map((l) => ({
-      tracking_number: l.tracking_number,
-      tracking_url: "#",
-      label_url: "#",
-    }))
+      .filter((l) => !!l.tracking_number)
+      .map((l) => ({
+        tracking_number: l.tracking_number,
+        tracking_url: "#",
+        label_url: "#",
+      }))
 
     await createShipment(
       {
@@ -78,18 +78,8 @@ export function OrderCreateShipmentForm({
         onSubmit={handleSubmit}
         className="flex h-full flex-col overflow-hidden"
       >
-        <RouteFocusModal.Header>
-          <div className="flex items-center justify-end gap-x-2">
-            <RouteFocusModal.Close asChild>
-              <Button size="small" variant="secondary">
-                {t("actions.cancel")}
-              </Button>
-            </RouteFocusModal.Close>
-            <Button size="small" type="submit" isLoading={isMutating}>
-              {t("actions.save")}
-            </Button>
-          </div>
-        </RouteFocusModal.Header>
+        <RouteFocusModal.Header />
+
         <RouteFocusModal.Body className="flex h-full w-full flex-col items-center divide-y overflow-y-auto">
           <div className="flex size-full flex-col items-center overflow-auto p-16">
             <div className="flex w-full max-w-[736px] flex-col justify-center px-2 pb-2">
@@ -166,6 +156,16 @@ export function OrderCreateShipmentForm({
             </div>
           </div>
         </RouteFocusModal.Body>
+        <RouteFocusModal.Footer>
+          <RouteFocusModal.Close asChild>
+            <Button size="small" variant="secondary">
+              {t("actions.cancel")}
+            </Button>
+          </RouteFocusModal.Close>
+          <Button size="small" type="submit" isLoading={isMutating}>
+            {t("actions.save")}
+          </Button>
+        </RouteFocusModal.Footer>
       </KeyboundForm>
     </RouteFocusModal.Form>
   )
