@@ -36,6 +36,7 @@ Use Nocto for:
  - Custom Sidebar – Replace, add or remove items on the sidebar
  - Pluggable UI elements – Create your own UI plugin and install it on top of Nocto. Replace existing pages or add completely new ones wherever you want.
  - Dynamic slots – Tailor the UI by injecting your components into existing modules which are exposing the slots
+ - RBAC - render different UI for different users. Fully backend-agnostic.
 
 Learn more about [Nocto’s architecture](https://www.noctojs.com/docs/architecture) and [Nocto's configuration](https://www.noctojs.com/docs/nocto-configuration) in the Docs.
 
