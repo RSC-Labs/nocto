@@ -13,6 +13,12 @@ export const sidebarOrders = {
     path: "/orders",
     label: "Orders",
     icon: ShoppingCart,
+    items: [
+      {
+        path: "/draft-orders",
+        label: "Drafts",
+      }
+    ],
   },
   routes: (): RouteEntry[] => [
     {
