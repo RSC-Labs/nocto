@@ -13,6 +13,7 @@ export const noctoConfig: NoctoConfig = {
       }
     },
     "@order-detail": {},
+    "@draft-orders": {},
     "@campaigns": {},
     "@categories": {},
     "@collections": {},
