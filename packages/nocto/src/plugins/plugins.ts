@@ -17,7 +17,7 @@ import { sidebarProducts } from "./sidebar/products"
 import { sidebarPromotions } from "./sidebar/promotions"
 
 import { orderDetail } from "./default/order-detail"
-import { draftOrdersRoutes } from "./default/draft-orders"
+import { draftOrdersRoutes } from "./extensions/draft-orders"
 import { myPlugin } from "./custom/order-detail-slot-1"
 import { customInjection } from "./rbac-test/product-main-slot"
 
