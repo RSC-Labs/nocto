@@ -1,6 +1,6 @@
 {
   "name": "@rsc-labs/nocto",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Fully pluggable Medusa Admin - replace, extend, or build your own UI.",
   "scripts": {
     "generate:static": "node ./scripts/generate-currencies.js && prettier --write ./src/lib/currencies.ts",
