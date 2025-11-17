@@ -4,8 +4,7 @@ import { loadBuiltInPlugins } from "./plugin-system/load-plugins"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { queryClient } from "./lib/query-client"
 import { useMe } from "./hooks/api"
-import { NoctoConfig } from "./plugin-system/types/nocto-config"
-import { NoctoPluginProvider, NoctoRbacProvider } from "@rsc-labs/nocto-plugin-system"
+import { NoctoPluginProvider, NoctoRbacProvider, NoctoConfig } from "@rsc-labs/nocto-plugin-system"
 
 interface AppProps {
   plugins?: DashboardPlugin[]

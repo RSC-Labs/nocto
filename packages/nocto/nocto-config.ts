@@ -18,6 +18,7 @@ export const noctoConfig: NoctoConfig = {
     "@collections": {},
     "@core-routes": {},
     "@customer-groups": {},
+    "@draft-orders": {},
     "@public-routes": {},
     "@reservations": {},
     "@settings": {},
