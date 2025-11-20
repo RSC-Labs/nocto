@@ -419,3 +419,57 @@ export const useConfirmImportProducts = (
     ...options,
   })
 }
+
+export const useBatchImageVariants = (
+  productId: string,
+  imageId: string,
+  options?: UseMutationOptions<
+    HttpTypes.AdminBatchImageVariantResponse,
+    FetchError,
+    HttpTypes.AdminBatchImageVariantRequest
+  >
+) => {
+  return useMutation({
+    mutationFn: (payload) =>
+      sdk.admin.product.batchImageVariants(productId, imageId, payload),
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({
+        queryKey: productsQueryKeys.detail(productId),
+      })
+      queryClient.invalidateQueries({ queryKey: variantsQueryKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: variantsQueryKeys.details() })
+
+      options?.onSuccess?.(data, variables, context)
+    },
+    ...options,
+  })
+}
+
+export const useBatchVariantImages = (
+  productId: string,
+  variantId: string,
+  options?: UseMutationOptions<
+    HttpTypes.AdminBatchVariantImagesResponse,
+    FetchError,
+    HttpTypes.AdminBatchVariantImagesRequest
+  >
+) => {
+  return useMutation({
+    mutationFn: (payload) =>
+      sdk.admin.product.batchVariantImages(productId, variantId, payload),
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({
+        queryKey: productsQueryKeys.detail(productId),
+      })
+      queryClient.invalidateQueries({
+        queryKey: variantsQueryKeys.list({ productId }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: variantsQueryKeys.detail(variantId),
+      })
+
+      options?.onSuccess?.(data, variables, context)
+    },
+    ...options,
+  })
+}

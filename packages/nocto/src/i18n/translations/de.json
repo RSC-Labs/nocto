@@ -214,7 +214,7 @@
         "goToLocations": "Standorte",
         "goToPublishableApiKeys": "Veröffentlichbare API-Schlüssel",
         "goToSecretApiKeys": "Geheime API-Schlüssel",
-        "goToWorkflows": "Arbeitsabläufe",
+        "goToWorkflows": "Workflows",
         "goToProfile": "Profil",
         "goToReturnReasons": "Rückgabegründe"
       }
@@ -250,7 +250,7 @@
       },
       "main": {
         "store": "Shop",
-        "storeSettings": "Einstellungen speichern"
+        "storeSettings": "Shop Einstellungen"
       },
       "settings": {
         "header": "Einstellungen",
@@ -267,7 +267,7 @@
       "disabled": "Das Ändern der sichtbaren Spalten ist deaktiviert."
     },
     "shortcuts": {
-      "label": "Verknüpfungen",
+      "label": "Tastenkürzel",
       "commands": {
         "undo": "Rückgängig machen",
         "redo": "Wiederholen",
@@ -359,8 +359,8 @@
     "label": "E-Mail"
   },
   "transferOwnership": {
-    "header": "Eigentum übertragen",
-    "label": "Eigentum übertragen",
+    "header": "Bestellung übertragen",
+    "label": "Bestellung übertragen",
     "details": {
       "order": "Bestelldetails",
       "draft": "Entwurfsdetails"
@@ -2502,7 +2502,7 @@
     "invalidLinkHint": "Versuchen Sie erneut, Ihr Passwort zurückzusetzen."
   },
   "workflowExecutions": {
-    "domain": "Arbeitsabläufe",
+    "domain": "Workflows",
     "subtitle": "Sehen Sie sich Workflow-Ausführungen in Ihrer Medusa-Anwendung an und verfolgen Sie sie.",
     "transactionIdLabel": "Transaktions-ID",
     "workflowIdLabel": "Workflow-ID",

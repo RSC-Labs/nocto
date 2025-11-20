@@ -125,6 +125,7 @@ export const PriceListPricesAddProductIdsForm = ({
       updater,
     },
     pageSize: PAGE_SIZE,
+    prefix: PREFIX,
     meta: {
       variantIdMap,
     },

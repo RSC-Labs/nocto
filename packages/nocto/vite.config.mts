@@ -12,6 +12,10 @@ export default defineConfig(({ mode }) => {
   const STOREFRONT_URL =
     env.VITE_MEDUSA_STOREFRONT_URL || "http://localhost:8000"
 
+  const ADMIN_AUTH_TYPE = env.VITE_ADMIN_AUTH_TYPE ?? undefined
+
+  const JWT_TOKEN_STORAGE_KEY = env.VITE_JWT_TOKEN_STORAGE_KEY ?? undefined
+
   /**
    * Add this to your .env file to specify the project to load admin extensions from.
    */
@@ -30,6 +34,8 @@ export default defineConfig(({ mode }) => {
       __BASE__: JSON.stringify(BASE),
       __BACKEND_URL__: JSON.stringify(BACKEND_URL),
       __STOREFRONT_URL__: JSON.stringify(STOREFRONT_URL),
+      __AUTH_TYPE__: JSON.stringify(ADMIN_AUTH_TYPE),
+      __JWT_TOKEN_STORAGE_KEY__: JSON.stringify(JWT_TOKEN_STORAGE_KEY),
     },
     server: {
       open: true,

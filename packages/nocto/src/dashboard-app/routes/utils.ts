@@ -1,8 +1,8 @@
 import React, { ComponentType } from "react"
 import { LoaderFunction, RouteObject } from "react-router-dom"
 import { ErrorBoundary } from "../../components/utilities/error-boundary"
-import { RouteExtension, RouteModule } from "../types"
 import { RouteEntry } from "@rsc-labs/nocto-plugin-system"
+import { RouteExtension, RouteModule } from "../types"
 
 /**
  * Used to test if a route is a settings route.
@@ -38,9 +38,10 @@ const createBranchRoute = (segment: string): RouteObject => ({
 const createLeafRoute = (
   Component: ComponentType,
   loader?: LoaderFunction,
-  handle?: object
+  handle?: object,
+  path: string = ""
 ): RouteObject => ({
-  path: "",
+  path,
   ErrorBoundary: ErrorBoundary,
   async lazy() {
     const result: {
@@ -150,7 +151,6 @@ const addRoute = (
 
   if (isComponentSegment || remainingSegments.length === 0) {
     route.children ||= []
-    const leaf = createLeafRoute(Component, loader)
 
     if (handle) {
       route.handle = handle
@@ -160,9 +160,17 @@ const addRoute = (
       route.loader = loader
     }
 
-    leaf.children = processParallelRoutes(parallelRoutes, currentFullPath)
-    route.children.push(leaf)
-
+    // Since splat segments must occur at the end of a route, react-router enforces the segment to be a leaf.
+    // Therefore we can't create a child leaf route with `path: ""` and must instead modify the route itself
+    if (currentSegment === "*?" || currentSegment === "*") {
+      const leaf = createLeafRoute(Component, loader, handle, currentSegment)
+      leaf.children = processParallelRoutes(parallelRoutes, currentFullPath)
+      Object.assign(route, leaf)
+    } else {
+      const leaf = createLeafRoute(Component, loader)
+      leaf.children = processParallelRoutes(parallelRoutes, currentFullPath)
+      route.children.push(leaf)
+    }
     if (remainingSegments.length > 0) {
       addRoute(
         remainingSegments,
@@ -220,7 +228,6 @@ export const createRouteMap = (
 
   return root
 }
-
 export function mapPluginRoutes(routes: RouteEntry[]): RouteObject[] {
   return routes.map((r): RouteObject => ({
     path: r.path,

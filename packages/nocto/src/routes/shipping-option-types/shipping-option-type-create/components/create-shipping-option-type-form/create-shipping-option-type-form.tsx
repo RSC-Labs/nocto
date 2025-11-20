@@ -48,7 +48,7 @@ export const CreateShippingOptionTypeForm = () => {
           )
 
           handleSuccess(
-            `/settings/shipping-option-types/${shipping_option_type.id}`
+            `/settings/locations/shipping-option-types/${shipping_option_type.id}`
           )
         },
         onError: (e) => {

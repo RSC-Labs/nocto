@@ -451,6 +451,12 @@ export const currencies: Record<string, CurrencyInfo> = {
     symbol_native: "MURs",
     decimal_digits: 0,
   },
+  MWK: {
+    code: "MWK",
+    name: "Malawian Kwacha",
+    symbol_native: "K",
+    decimal_digits: 2,
+  },
   MXN: {
     code: "MXN",
     name: "Mexican Peso",
@@ -631,6 +637,12 @@ export const currencies: Record<string, CurrencyInfo> = {
     symbol_native: "T$",
     decimal_digits: 2,
   },
+  TJS: {
+    code: "TJS",
+    name: "Tajikistani Somoni",
+    symbol_native: "с.",
+    decimal_digits: 2,
+  },
   TRY: {
     code: "TRY",
     name: "Turkish Lira",
@@ -701,6 +713,12 @@ export const currencies: Record<string, CurrencyInfo> = {
     code: "XOF",
     name: "CFA Franc BCEAO",
     symbol_native: "CFA",
+    decimal_digits: 0,
+  },
+  XPF: {
+    code: "XPF",
+    name: "CFP Franc",
+    symbol_native: "₣",
     decimal_digits: 0,
   },
   YER: {

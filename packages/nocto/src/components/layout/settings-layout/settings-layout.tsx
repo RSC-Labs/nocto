@@ -44,6 +44,10 @@ const useSettingRoutes = (): INavItem[] => {
         to: "/settings/return-reasons",
       },
       {
+        label: t("refundReasons.domain"),
+        to: "/settings/refund-reasons",
+      },
+      {
         label: t("salesChannels.domain"),
         to: "/settings/sales-channels",
       },

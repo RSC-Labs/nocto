@@ -117,6 +117,7 @@ export const TaxRegionTaxRateEditForm = ({
                       <PercentageInput
                         {...field}
                         value={value?.value}
+                        decimalsLimit={4}
                         onValueChange={(value, _name, values) =>
                           onChange({
                             value: value,

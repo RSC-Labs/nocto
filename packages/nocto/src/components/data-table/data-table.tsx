@@ -1,19 +1,18 @@
 import {
-  Button,
-  clx,
+  DataTable as UiDataTable,
+  useDataTable,
   DataTableColumnDef,
   DataTableCommand,
   DataTableEmptyStateProps,
   DataTableFilter,
-  DataTableFilteringState,
-  DataTablePaginationState,
   DataTableRow,
   DataTableRowSelectionState,
-  DataTableSortingState,
   Heading,
-  DataTable as Primitive,
   Text,
-  useDataTable,
+  Button,
+  DataTableFilteringState,
+  DataTablePaginationState,
+  DataTableSortingState,
 } from "@medusajs/ui"
 import React, { ReactNode, useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
@@ -21,6 +20,12 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom"
 
 import { useQueryParams } from "../../hooks/use-query-params"
 import { ActionMenu } from "../common/action-menu"
+import { ViewPills } from "../table/view-selector"
+import { useFeatureFlag } from "../../providers/feature-flag-provider"
+
+// Types for column visibility and ordering
+type VisibilityState = Record<string, boolean>
+type ColumnOrderState = string[]
 
 type DataTableActionProps = {
   label: string
@@ -61,15 +66,18 @@ interface DataTableProps<TData> {
   filters?: DataTableFilter[]
   commands?: DataTableCommand[]
   action?: DataTableActionProps
+  actions?: DataTableActionProps[]
   actionMenu?: DataTableActionMenuProps
   rowCount?: number
   getRowId: (row: TData) => string
   enablePagination?: boolean
   enableSearch?: boolean
   autoFocusSearch?: boolean
+  enableFilterMenu?: boolean
   rowHref?: (row: TData) => string
   emptyState?: DataTableEmptyStateProps
   heading?: string
+  headingLevel?: "h1" | "h2" | "h3"
   subHeading?: string
   prefix?: string
   pageSize?: number
@@ -80,6 +88,18 @@ interface DataTableProps<TData> {
     enableRowSelection?: boolean | ((row: DataTableRow<TData>) => boolean)
   }
   layout?: "fill" | "auto"
+  enableColumnVisibility?: boolean
+  initialColumnVisibility?: VisibilityState
+  onColumnVisibilityChange?: (visibility: VisibilityState) => void
+  columnOrder?: ColumnOrderState
+  onColumnOrderChange?: (order: ColumnOrderState) => void
+  enableViewSelector?: boolean
+  entity?: string
+  currentColumns?: {
+    visible: string[]
+    order: string[]
+  }
+  filterBarContent?: React.ReactNode
 }
 
 export const DataTable = <TData,>({
@@ -88,14 +108,17 @@ export const DataTable = <TData,>({
   filters,
   commands,
   action,
+  actions,
   actionMenu,
   getRowId,
   rowCount = 0,
   enablePagination = true,
   enableSearch = true,
   autoFocusSearch = false,
+  enableFilterMenu,
   rowHref,
   heading,
+  headingLevel = "h1",
   subHeading,
   prefix,
   pageSize = 10,
@@ -103,13 +126,61 @@ export const DataTable = <TData,>({
   rowSelection,
   isLoading = false,
   layout = "auto",
+  enableColumnVisibility = false,
+  initialColumnVisibility = {},
+  onColumnVisibilityChange,
+  columnOrder,
+  onColumnOrderChange,
+  enableViewSelector = false,
+  entity,
+  currentColumns,
+  filterBarContent,
 }: DataTableProps<TData>) => {
   const { t } = useTranslation()
+  const isViewConfigEnabled = useFeatureFlag("view_configurations")
+
+  // If view config is disabled, don't use column visibility features
+  const effectiveEnableColumnVisibility =
+    isViewConfigEnabled && enableColumnVisibility
+  const effectiveEnableViewSelector = isViewConfigEnabled && enableViewSelector
 
   const enableFiltering = filters && filters.length > 0
+  const showFilterMenu =
+    enableFilterMenu !== undefined ? enableFilterMenu : enableFiltering
   const enableCommands = commands && commands.length > 0
   const enableSorting = columns.some((column) => column.enableSorting)
 
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>(initialColumnVisibility)
+
+  // Update column visibility when initial visibility changes
+  React.useEffect(() => {
+    // Deep compare to check if the visibility has actually changed
+    const currentKeys = Object.keys(columnVisibility).sort()
+    const newKeys = Object.keys(initialColumnVisibility).sort()
+
+    const hasChanged =
+      currentKeys.length !== newKeys.length ||
+      currentKeys.some((key, index) => key !== newKeys[index]) ||
+      Object.entries(initialColumnVisibility).some(
+        ([key, value]) => columnVisibility[key] !== value
+      )
+
+    if (hasChanged) {
+      setColumnVisibility(initialColumnVisibility)
+    }
+  }, [initialColumnVisibility])
+
+  // Wrapper function to handle column visibility changes
+  const handleColumnVisibilityChange = React.useCallback(
+    (visibility: VisibilityState) => {
+      setColumnVisibility(visibility)
+      onColumnVisibilityChange?.(visibility)
+    },
+    [onColumnVisibilityChange]
+  )
+
+  // Extract filter IDs for query param management
   const filterIds = useMemo(() => filters?.map((f) => f.id) ?? [], [filters])
   const prefixedFilterIds = filterIds.map((id) => getQueryParamKey(id, prefix))
 
@@ -167,18 +238,24 @@ export const DataTable = <TData,>({
 
   const handleFilteringChange = (value: DataTableFilteringState) => {
     setSearchParams((prev) => {
+      // Remove filters that are no longer in the state
       Array.from(prev.keys()).forEach((key) => {
-        if (prefixedFilterIds.includes(key) && !(key in value)) {
-          prev.delete(key)
+        if (prefixedFilterIds.includes(key)) {
+          // Extract the unprefixed key
+          const unprefixedKey = prefix ? key.replace(`${prefix}_`, "") : key
+          if (!(unprefixedKey in value)) {
+            prev.delete(key)
+          }
         }
       })
 
+      // Add or update filters in the state
       Object.entries(value).forEach(([key, filter]) => {
-        if (
-          prefixedFilterIds.includes(getQueryParamKey(key, prefix)) &&
-          filter
-        ) {
-          prev.set(getQueryParamKey(key, prefix), JSON.stringify(filter))
+        const prefixedKey = getQueryParamKey(key, prefix)
+        if (filter !== undefined) {
+          prev.set(prefixedKey, JSON.stringify(filter))
+        } else {
+          prev.delete(prefixedKey)
         }
       })
 
@@ -189,6 +266,16 @@ export const DataTable = <TData,>({
   const sorting: DataTableSortingState | null = useMemo(() => {
     return order ? parseSortingState(order) : null
   }, [order])
+
+  // Memoize current configuration to prevent infinite loops
+  const currentConfiguration = useMemo(
+    () => ({
+      filters: filtering,
+      sorting: sorting,
+      search: search,
+    }),
+    [filtering, sorting, search]
+  )
 
   const handleSortingChange = (value: DataTableSortingState) => {
     setSearchParams((prev) => {
@@ -266,68 +353,84 @@ export const DataTable = <TData,>({
       : undefined,
     rowSelection,
     isLoading,
+    columnVisibility: effectiveEnableColumnVisibility
+      ? {
+          state: columnVisibility,
+          onColumnVisibilityChange: handleColumnVisibilityChange,
+        }
+      : undefined,
+    columnOrder:
+      effectiveEnableColumnVisibility && columnOrder && onColumnOrderChange
+        ? {
+            state: columnOrder,
+            onColumnOrderChange: onColumnOrderChange,
+          }
+        : undefined,
   })
 
   const shouldRenderHeading = heading || subHeading
 
   return (
-    <Primitive
+    <UiDataTable
       instance={instance}
-      className={clx({
-        "h-full [&_tr]:last-of-type:!border-b": layout === "fill",
-      })}
+      className={
+        layout === "fill" ? "h-full [&_tr]:last-of-type:!border-b" : undefined
+      }
     >
-      <Primitive.Toolbar
+      <UiDataTable.Toolbar
         className="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center"
         translations={toolbarTranslations}
+        filterBarContent={filterBarContent}
       >
         <div className="flex w-full items-center justify-between gap-2">
-          {shouldRenderHeading && (
-            <div>
-              {heading && <Heading>{heading}</Heading>}
-              {subHeading && (
-                <Text size="small" className="text-ui-fg-subtle">
-                  {subHeading}
-                </Text>
-              )}
-            </div>
-          )}
-          <div className="flex items-center justify-end gap-x-2 md:hidden">
-            {enableFiltering && (
-              <Primitive.FilterMenu tooltip={t("filters.filterLabel")} />
+          <div className="flex items-center gap-x-4">
+            {shouldRenderHeading && (
+              <div>
+                {heading && <Heading level={headingLevel}>{heading}</Heading>}
+                {subHeading && (
+                  <Text size="small" className="text-ui-fg-subtle">
+                    {subHeading}
+                  </Text>
+                )}
+              </div>
             )}
-            <Primitive.SortingMenu tooltip={t("filters.sortLabel")} />
-            {actionMenu && <ActionMenu variant="primary" {...actionMenu} />}
-            {action && <DataTableAction {...action} />}
-          </div>
-        </div>
-        <div className="flex w-full items-center gap-2 md:justify-end">
-          {enableSearch && (
-            <div className="w-full md:w-auto">
-              <Primitive.Search
-                placeholder={t("filters.searchLabel")}
-                autoFocus={autoFocusSearch}
+            {effectiveEnableViewSelector && entity && (
+              <ViewPills
+                entity={entity}
+                currentColumns={currentColumns}
+                currentConfiguration={currentConfiguration}
               />
-            </div>
-          )}
-          <div className="hidden items-center gap-x-2 md:flex">
-            {enableFiltering && (
-              <Primitive.FilterMenu tooltip={t("filters.filterLabel")} />
             )}
-            <Primitive.SortingMenu tooltip={t("filters.sortLabel")} />
+          </div>
+          <div className="flex items-center gap-x-2">
+            {showFilterMenu && <UiDataTable.FilterMenu />}
+            {enableSorting && <UiDataTable.SortingMenu />}
+            {enableSearch && (
+              <div className="w-full md:w-auto">
+                <UiDataTable.Search
+                  placeholder={t("filters.searchLabel")}
+                  autoFocus={autoFocusSearch}
+                />
+              </div>
+            )}
             {actionMenu && <ActionMenu variant="primary" {...actionMenu} />}
-            {action && <DataTableAction {...action} />}
+            {actions && actions.length > 0 && (
+              <DataTableActions actions={actions} />
+            )}
+            {!actions && action && <DataTableAction {...action} />}
           </div>
         </div>
-      </Primitive.Toolbar>
-      <Primitive.Table emptyState={emptyState} />
+      </UiDataTable.Toolbar>
+      <UiDataTable.Table emptyState={emptyState} />
       {enablePagination && (
-        <Primitive.Pagination translations={paginationTranslations} />
+        <UiDataTable.Pagination translations={paginationTranslations} />
       )}
       {enableCommands && (
-        <Primitive.CommandBar selectedLabel={(count) => `${count} selected`} />
+        <UiDataTable.CommandBar
+          selectedLabel={(count) => `${count} selected`}
+        />
       )}
-    </Primitive>
+    </UiDataTable>
   )
 }
 
@@ -367,7 +470,7 @@ function parseFilterState(
   for (const id of filterIds) {
     const filterValue = value[id]
 
-    if (filterValue) {
+    if (filterValue !== undefined) {
       filters[id] = JSON.parse(filterValue)
     }
   }
@@ -392,6 +495,8 @@ const useDataTableTranslations = () => {
 
   const toolbarTranslations = {
     clearAll: t("actions.clearAll"),
+    sort: t("filters.sortLabel"),
+    columns: "Columns",
   }
 
   return {
@@ -424,5 +529,15 @@ const DataTableAction = ({
     <Button {...buttonProps} onClick={props.onClick}>
       {label}
     </Button>
+  )
+}
+
+const DataTableActions = ({ actions }: { actions: DataTableActionProps[] }) => {
+  return (
+    <div className="flex items-center gap-x-2">
+      {actions.map((action, index) => (
+        <DataTableAction key={index} {...action} />
+      ))}
+    </div>
   )
 }

@@ -52,6 +52,7 @@
     "noSearchResultsFor": "No search results for <0>'{{query}}'</0>",
     "noRecordsTitle": "No records",
     "noRecordsMessage": "There are no records to show",
+    "noRecordsMessageFiltered": "There are no records to show matching the filters",
     "unsavedChangesTitle": "Are you sure you want to leave this form?",
     "unsavedChangesDescription": "You have unsaved changes that will be lost if you exit this form.",
     "includesTaxTooltip": "Prices in this column are tax inclusive.",
@@ -121,6 +122,8 @@
     "continue": "Continue",
     "continueWithEmail": "Continue with Email",
     "idCopiedToClipboard": "ID copied to clipboard",
+    "editVariantImages": "Edit variant images",
+    "editImages": "Edit images",
     "addReason": "Add Reason",
     "addNote": "Add Note",
     "reset": "Reset",
@@ -505,10 +508,12 @@
     "media": {
       "label": "Media",
       "editHint": "Add media to the product to showcase it in your storefront.",
+      "manageImageVariants": "Manage associated variants",
       "makeThumbnail": "Make thumbnail",
       "uploadImagesLabel": "Upload images",
       "uploadImagesHint": "Drag and drop images here or click to upload.",
       "invalidFileType": "'{{name}}' is not a supported file type. Supported file types are: {{types}}.",
+      "fileTooLarge": "One or more files exceed the maximum file size of {{size}}: {{name}}",
       "failedToUpload": "Failed to upload the added media. Please try again.",
       "deleteWarning_one": "You are about to delete {{count}} image. This action cannot be undone.",
       "deleteWarning_other": "You are about to delete {{count}} images. This action cannot be undone.",
@@ -520,10 +525,27 @@
       "deleteImageLabel": "Delete current image",
       "emptyState": {
         "header": "No media yet",
-        "description": "Add media to the product to showcase it in your storefront.",
+        "description": "Add media to showcase it in your storefront.",
         "action": "Add media"
       },
-      "successToast": "Media was successfully updated."
+      "successToast": "Media was successfully updated.",
+      "variantImages": "Variant images",
+      "showAvailableImages": "Show available images",
+      "availableImages": "Select images",
+      "selectToAdd": "Add product images to the variant. To add new images, add them to the product first.",
+      "removeSelected": "Remove Selected"
+    },
+    "variantMedia": {
+      "label": "Variant Media",
+      "manageVariants": "Manage variants",
+      "addToMultipleVariants": "Add to multiple variants",
+      "manageVariantsDescription": "Manage associated variants for the image",
+      "successToast": "Image variants successfully updated.",
+      "emptyState": {
+        "header": "No media yet",
+        "description": "Add media to the variant to showcase it in your storefront.",
+        "action": "Add media"
+      }
     },
     "discountableHint": "When unchecked, discounts will not be applied to this product.",
     "noSalesChannels": "Not available in any sales channels",
@@ -535,6 +557,18 @@
       "published": "Published",
       "proposed": "Proposed",
       "rejected": "Rejected"
+    },
+    "columns": {
+      "product_display": "Product",
+      "variants_count": "Variants",
+      "sales_channels_display": "Sales Channels",
+      "collection": "Collection",
+      "status": "Status",
+      "thumbnail": "Thumbnail",
+      "title": "Title",
+      "handle": "Handle",
+      "created_at": "Created",
+      "updated_at": "Updated"
     },
     "fields": {
       "title": {
@@ -819,6 +853,7 @@
     "deleteWarning": "You are about to delete an inventory item. This action cannot be undone.",
     "editItemDetails": "Edit item details",
     "quantityAcrossLocations": "{{quantity}} across {{locations}} locations",
+    "levelDeleted": "Inventory level deleted successfully.",
     "create": {
       "title": "Create Inventory Item",
       "details": "Details",
@@ -1067,7 +1102,8 @@
       "itemSubtotal": "Item Subtotal",
       "shippingSubtotal": "Shipping Subtotal",
       "discountSubtotal": "Discount Subtotal",
-      "taxTotal": "Tax Total"
+      "taxTotal": "Tax Total",
+      "totalAfterDiscount": "Total After Discount"
     },
     "transfer": {
       "title": "Transfer ownership",
@@ -1315,6 +1351,8 @@
     "shipment": {
       "title": "Mark fulfillment shipped",
       "trackingNumber": "Tracking number",
+      "trackingUrl": "Tracking URL",
+      "labelUrl": "Label URL",
       "addTracking": "Add tracking number",
       "sendNotification": "Send notification",
       "sendNotificationHint": "Notify the customer about this shipment.",
@@ -1521,7 +1559,10 @@
   "stockLocations": {
     "domain": "Locations & Shipping",
     "list": {
-      "description": "Manage your store's stock locations and shipping options."
+      "description": "Manage your store's stock locations and shipping options.",
+      "noRecordsMessage": "No records",
+      "noRecordsMessageEmpty": "No locations found",
+      "noRecordsMessageFiltered": "No locations found matching the filters"
     },
     "create": {
       "header": "Create Stock Location",
@@ -1534,7 +1575,8 @@
       "successToast": "Location {{name}} was successfully updated."
     },
     "delete": {
-      "confirmation": "You are about to delete the stock location \"{{name}}\". This action cannot be undone."
+      "confirmation": "You are about to delete the stock location \"{{name}}\". This action cannot be undone.",
+      "successToast": "Location \"{{name}}\" was successfully deleted."
     },
     "fulfillmentProviders": {
       "header": "Fulfillment Providers",
@@ -1567,6 +1609,10 @@
       "shippingProfiles": {
         "label": "Shipping Profiles",
         "description": "Group products by shipping requirements"
+      },
+      "shippingOptionTypes": {
+        "label": "Shipping Option Types",
+        "description": "Group shipping options by types"
       }
     },
     "salesChannels": {
@@ -1998,6 +2044,7 @@
       "campaign": "Campaign",
       "method": "Method",
       "allocation": "Allocation",
+      "allocationTooltip": "Each enforces the quantity limit per item, while Once enforces the quantity limit across the entire cart",
       "addCondition": "Add condition",
       "clearAll": "Clear all",
       "taxInclusive": "Tax Inclusive",
@@ -2139,6 +2186,10 @@
         "across": {
           "title": "Across",
           "description": "Applies value across items"
+        },
+        "once": {
+          "title": "Once",
+          "description": "Applies value to a limited number of items"
         }
       },
       "code": {
@@ -2146,7 +2197,8 @@
         "description": "The code your customers will enter during checkout."
       },
       "value": {
-        "title": "Promotion Value"
+        "title": "Promotion Value",
+        "invalid": "Invalid promotion value"
       },
       "value_type": {
         "fixed": {
@@ -2180,7 +2232,7 @@
     "delete": {
       "title": "Are you sure?",
       "description": "You are about to delete the campaign '{{name}}'. This action cannot be undone.",
-      "successToast": "Campaign '{{name}}' was successfully created."
+      "successToast": "Campaign '{{name}}' was successfully deleted."
     },
     "edit": {
       "header": "Edit Campaign",
@@ -2209,12 +2261,17 @@
       "end_date": "End date",
       "total_spend": "Budget spent",
       "total_used": "Budget used",
+      "totalUsedByAttribute": "Total used",
       "budget_limit": "Budget limit",
       "campaign_id": {
-        "hint": "Only campaigns with the same currency code as the promotion are shown in this list."
+        "hint": "Disabled campaigns have budget in a different currency than the promotion."
       }
     },
     "budget": {
+      "attribute": {
+        "customer_id": "customer",
+        "customer_email": "email"
+      },
       "create": {
         "hint": "Create a budget for the campaign.",
         "header": "Campaign Budget"
@@ -2224,7 +2281,12 @@
         "type": "Type",
         "currency": "Currency",
         "limit": "Limit",
-        "used": "Used"
+        "used": "Used",
+        "budgetAttribute": "Limit usage per",
+        "budgetAttributeTooltip": "Define how many times the promotion can be used by each customer or email.",
+        "totalUsedByAttribute": "Budget limit per: {{attribute}}",
+        "totalUsedByAttributeCustomerId": "Budget limit per customer",
+        "totalUsedByAttributeEmail": "Budget limit per email"
       },
       "type": {
         "spend": {
@@ -2234,6 +2296,12 @@
         "usage": {
           "title": "Usage",
           "description": "Set a limit on how many times the promotion can be used."
+        },
+        "useByAttribute": {
+          "title": "Usage by attribute (customer id, email, etc.)",
+          "titleCustomerId": "Usage per customer",
+          "titleEmail": "Usage per email",
+          "description": "Set a limit on how many times the promotion can be used by a specific attribute value."
         }
       },
       "edit": {
@@ -2722,6 +2790,41 @@
       }
     }
   },
+  "refundReasons": {
+    "domain": "Refund Reasons",
+    "subtitle": "Manage reasons for issuing refunds.",
+    "calloutHint": "Manage the reasons to categorize refunds.",
+    "editReason": "Edit Refund Reason",
+    "create": {
+      "header": "Add Refund Reason",
+      "subtitle": "Specify the most common reasons for refunds.",
+      "hint": "Create a new refund reason to categorize refunds.",
+      "successToast": "Refund reason {{label}} was successfully created."
+    },
+    "edit": {
+      "header": "Edit Refund Reason",
+      "subtitle": "Edit the value of the refund reason.",
+      "successToast": "Refund reason {{label}} was successfully updated."
+    },
+    "delete": {
+      "confirmation": "You are about to delete the refund reason \"{{label}}\". This action cannot be undone.",
+      "successToast": "Refund reason was successfully deleted."
+    },
+    "fields": {
+      "label": {
+        "label": "Label",
+        "placeholder": "Gesture of goodwill"
+      },
+      "code": {
+        "label": "Code",
+        "placeholder": "gesture_of_goodwill"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Customer had a bad shopping experience"
+      }
+    }
+  },
   "login": {
     "forgotPassword": "Forgot password? - <0>Reset</0>",
     "title": "Welcome to Medusa",
@@ -2909,7 +3012,9 @@
     "from": "From",
     "to": "To",
     "beaware": "Be aware",
-    "loading": "Loading"
+    "loading": "Loading",
+    "selectValue": "Select Value",
+    "selectValues": "Select Values"
   },
   "fields": {
     "amount": "Amount",
@@ -2943,6 +3048,7 @@
     "category": "Category",
     "collection": "Collection",
     "discountable": "Discountable",
+    "promotionCode": "Promotion code",
     "handle": "Handle",
     "subtitle": "Subtitle",
     "by": "By",
@@ -3090,5 +3196,25 @@
     "minutes_other": "Minutes",
     "seconds_one": "Second",
     "seconds_other": "Seconds"
+  },
+  "views": {
+    "save": "Save",
+    "saveAsNew": "Save as new view",
+    "updateDefaultForEveryone": "Update default for everyone",
+    "updateViewName": "Update view",
+    "prompts": {
+      "updateDefault": {
+        "title": "Update default view",
+        "description": "This will update the default view for all users. Are you sure?",
+        "confirmText": "Update for everyone",
+        "cancelText": "Cancel"
+      },
+      "updateView": {
+        "title": "Update view",
+        "description": "Are you sure you want to update \"{{name}}\"?",
+        "confirmText": "Update",
+        "cancelText": "Cancel"
+      }
+    }
   }
 }

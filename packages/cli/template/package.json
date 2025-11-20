@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rsc-labs/nocto": "^0.2.1",
+    "@rsc-labs/nocto": "^0.3.0",
     "@rsc-labs/nocto-plugin-system": "^0.1.5",
     "@vitejs/plugin-react": "^4.6.0",
     "react": "^18.2.0",

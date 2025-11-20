@@ -726,7 +726,8 @@ export const ReturnCreateForm = ({
                       <div className="flex items-center">
                         <Form.Control className="mr-4 self-start">
                           <Switch
-                            className="mt-[2px]"
+                            dir="ltr"
+                            className="mt-[2px] rtl:rotate-180"
                             checked={!!value}
                             onCheckedChange={onChange}
                             {...field}

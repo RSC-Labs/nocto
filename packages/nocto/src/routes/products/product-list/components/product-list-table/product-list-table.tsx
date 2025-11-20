@@ -18,12 +18,20 @@ import { useProductTableFilters } from "../../../../../hooks/table/filters/use-p
 import { useProductTableQuery } from "../../../../../hooks/table/query/use-product-table-query"
 import { useDataTable } from "../../../../../hooks/use-data-table"
 import { productsLoader } from "../../loader"
+import { useFeatureFlag } from "../../../../../providers/feature-flag-provider"
+import { ConfigurableProductListTable } from "./configurable-product-list-table"
 
 const PAGE_SIZE = 20
 
 export const ProductListTable = () => {
   const { t } = useTranslation()
   const location = useLocation()
+  const isViewConfigEnabled = useFeatureFlag("view_configurations")
+
+  // If feature flag is enabled, use the new configurable table
+  if (isViewConfigEnabled) {
+    return <ConfigurableProductListTable />
+  }
 
   const initialData = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof productsLoader>>
@@ -60,13 +68,13 @@ export const ProductListTable = () => {
   return (
     <Container className="divide-y p-0">
       <div className="flex items-center justify-between px-6 py-4">
-        <Heading level="h2">{t("products.domain")}</Heading>
+        <Heading level="h1">{t("products.domain")}</Heading>
         <div className="flex items-center justify-center gap-x-2">
           <Button size="small" variant="secondary" asChild>
             <Link to={`export${location.search}`}>{t("actions.export")}</Link>
           </Button>
           <Button size="small" variant="secondary" asChild>
-            <Link to="import">{t("actions.import")}</Link>
+            <Link to={`import${location.search}`}>{t("actions.import")}</Link>
           </Button>
           <Button size="small" variant="secondary" asChild>
             <Link to="create">{t("actions.create")}</Link>

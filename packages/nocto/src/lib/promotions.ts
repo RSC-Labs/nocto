@@ -39,7 +39,9 @@ export const getPromotionStatus = (promotion: HttpTypes.AdminPromotion) => {
 
   const campaignBudget = campaign.budget
   const overBudget =
-    campaignBudget && campaignBudget.used! > campaignBudget.limit!
+    campaignBudget &&
+    campaignBudget.limit &&
+    campaignBudget.used! > campaignBudget.limit!
 
   if ((campaign.ends_at && new Date(campaign.ends_at) < date) || overBudget) {
     return promotionStatusMap[PromotionStatus.EXPIRED]

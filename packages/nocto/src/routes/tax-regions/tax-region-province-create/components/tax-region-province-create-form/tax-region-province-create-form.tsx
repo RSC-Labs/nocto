@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { InformationCircleSolid } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
-import { Button, Heading, Input, Text, Tooltip, toast } from "@medusajs/ui"
+import { Button, Heading, Input, Text, toast, Tooltip } from "@medusajs/ui"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { z } from "zod"
@@ -189,6 +189,7 @@ export const TaxRegionProvinceCreateForm = ({
                             <PercentageInput
                               {...field}
                               value={value?.value}
+                              decimalsLimit={4}
                               onValueChange={(value, _name, values) =>
                                 onChange({
                                   value: value,

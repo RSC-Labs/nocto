@@ -66,7 +66,7 @@ export const AddCustomersForm = ({
   const filters = useCustomerTableFilters()
 
   const { customers, count, isLoading, isError, error } = useCustomers({
-    fields: "id,email,first_name,last_name,*groups",
+    fields: "id,email,first_name,last_name,has_account,*groups",
     ...searchParams,
   })
 

@@ -29,8 +29,8 @@ export const CreatePromotionSchema = z
     rules: RuleSchema,
     is_tax_inclusive: z.boolean().optional(),
     application_method: z.object({
-      allocation: z.enum(["each", "across"]),
-      value: z.number().min(0),
+      allocation: z.enum(["each", "across", "once"]),
+      value: z.number().min(0).or(z.string().min(1)),
       currency_code: z.string().optional(),
       max_quantity: z.number().optional().nullable(),
       target_rules: RuleSchema,
@@ -47,7 +47,8 @@ export const CreatePromotionSchema = z
       }
 
       return (
-        data.application_method.allocation === "each" &&
+        (data.application_method.allocation === "each" ||
+          data.application_method.allocation === "once") &&
         typeof data.application_method.max_quantity === "number"
       )
     },

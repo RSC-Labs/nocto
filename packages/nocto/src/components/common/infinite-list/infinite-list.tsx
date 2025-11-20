@@ -65,6 +65,13 @@ export const InfiniteList = <
   const parentRef = useRef<HTMLDivElement>(null)
   const startObserver = useRef<IntersectionObserver>()
   const endObserver = useRef<IntersectionObserver>()
+  const fetchNextPageRef = useRef(fetchNextPage)
+  const fetchPreviousPageRef = useRef(fetchPreviousPage)
+
+  useEffect(() => {
+    fetchNextPageRef.current = fetchNextPage
+    fetchPreviousPageRef.current = fetchPreviousPage
+  }, [fetchNextPage, fetchPreviousPage])
 
   useEffect(() => {
     if (isPending) {
@@ -77,7 +84,8 @@ export const InfiniteList = <
       startObserver.current = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting && hasPreviousPage) {
-            fetchPreviousPage()
+            startObserver.current?.disconnect()
+            fetchPreviousPageRef.current()
           }
         },
         {
@@ -88,7 +96,8 @@ export const InfiniteList = <
       endObserver.current = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting && hasNextPage) {
-            fetchNextPage()
+            endObserver.current?.disconnect()
+            fetchNextPageRef.current()
           }
         },
         {
@@ -97,8 +106,12 @@ export const InfiniteList = <
       )
 
       // Register the new observers to observe the new first and last children
-      startObserver.current?.observe(parentRef.current!.firstChild as Element)
-      endObserver.current?.observe(parentRef.current!.lastChild as Element)
+      if (parentRef.current?.firstChild) {
+        startObserver.current?.observe(parentRef.current.firstChild as Element)
+      }
+      if (parentRef.current?.lastChild) {
+        endObserver.current?.observe(parentRef.current.lastChild as Element)
+      }
     }
 
     // Clear the old observers
@@ -107,8 +120,6 @@ export const InfiniteList = <
       endObserver.current?.disconnect()
     }
   }, [
-    fetchNextPage,
-    fetchPreviousPage,
     hasNextPage,
     hasPreviousPage,
     isFetching,

@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   Button,
+  clx,
   Divider,
   Heading,
   Hint,
@@ -8,7 +9,6 @@ import {
   Label,
   Select,
   Text,
-  clx,
   toast,
 } from "@medusajs/ui"
 import { useFieldArray, useForm, useWatch } from "react-hook-form"
@@ -36,6 +36,7 @@ import {
   TaxRateRuleReferenceSchema,
 } from "../../../common/schemas"
 import { createTaxRulePayload } from "../../../common/utils"
+import { useDocumentDirection } from "../../../../../hooks/use-document-direction"
 
 const TaxRegionCreateTaxOverrideSchema = z.object({
   name: z.string().min(1),
@@ -77,7 +78,7 @@ export const TaxRegionCreateTaxOverrideForm = ({
   const { t } = useTranslation()
   const { handleSuccess } = useRouteModal()
   const { setIsOpen } = useStackedModal()
-
+  const direction = useDocumentDirection()
   const form = useForm<z.infer<typeof TaxRegionCreateTaxOverrideSchema>>({
     defaultValues: {
       name: "",
@@ -414,6 +415,7 @@ export const TaxRegionCreateTaxOverrideForm = ({
                               <PercentageInput
                                 {...field}
                                 placeholder="0.00"
+                                decimalsLimit={4}
                                 value={value?.value}
                                 onValueChange={(value, _name, values) =>
                                   onChange({
@@ -546,6 +548,7 @@ export const TaxRegionCreateTaxOverrideForm = ({
                                   <div className="text-ui-fg-subtle grid gap-1.5 px-1.5 md:grid-cols-2">
                                     {isLast ? (
                                       <Select
+                                        dir={direction}
                                         value={type}
                                         onValueChange={handleChangeType}
                                       >

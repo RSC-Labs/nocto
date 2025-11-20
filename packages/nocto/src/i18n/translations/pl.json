@@ -1093,19 +1093,20 @@
       "requires_action": "Wymaga działania"
     },
     "summary": {
-      "requestReturn": "Złóż wniosek o zwrot",
+      "requestReturn": "Zgłoś zwrot",
       "allocateItems": "Przydziel produkty",
       "editOrder": "Edytuj zamówienie",
       "editOrderContinue": "Kontynuuj edycję zamówienia",
-      "inventoryKit": "Składa się z {{count}}x produktów magazynowych",
-      "itemTotal": "Suma produktów",
-      "shippingTotal": "Suma wysyłki",
-      "discountTotal": "Suma rabatów",
-      "taxTotalIncl": "Suma podatku (wliczono)",
-      "itemSubtotal": "Suma produktów",
-      "shippingSubtotal": "Suma wysyłki",
-      "discountSubtotal": "Suma rabatów",
-      "taxTotal": "Suma podatku"
+      "inventoryKit": "Składa się z {{count}} produktów magazynowych",
+      "itemTotal": "Wartość produktów",
+      "shippingTotal": "Koszt wysyłki",
+      "discountTotal": "Wartość rabatów",
+      "taxTotalIncl": "Kwota podatku (wliczona)",
+      "itemSubtotal": "Wartość produktów",
+      "shippingSubtotal": "Koszt wysyłki",
+      "discountSubtotal": "Wartość rabatów",
+      "taxTotal": "Kwota podatku",
+      "totalAfterDiscount": "Razem po rabacie"
     },
     "transfer": {
       "title": "Przekaż własność",
@@ -1611,6 +1612,10 @@
       "shippingProfiles": {
         "label": "Profile wysyłki",
         "description": "Grupuj produkty według wymagań wysyłki"
+      },
+      "shippingOptionTypes": {
+        "label": "Typy opcji wysyłki",
+        "description": "Grupuj opcje wysyłki według typów"
       }
     },
     "salesChannels": {
@@ -1950,7 +1955,8 @@
           "productCollection": "Kolekcje produktów",
           "productTag": "Tagi produktów",
           "productType": "Typy produktów",
-          "customerGroup": "Grupy klientów"
+          "customerGroup": "Grupy klientów",
+          "shippingOption": "Opcje wysyłki"
         },
         "operators": {
           "in": "w",
@@ -1962,14 +1968,16 @@
           "productCollection": "Wyszukaj kolekcje produktów",
           "productTag": "Szukaj tagów produktów",
           "productType": "Wyszukaj typy produktów",
-          "customerGroup": "Wyszukaj grupy klientów"
+          "customerGroup": "Wyszukaj grupy klientów",
+          "shippingOption": "Wyszukaj opcje wysyłki"
         },
         "tags": {
           "product": "Produkt",
           "productCollection": "Kolekcja produktów",
           "productTag": "Etykieta produktu",
           "productType": "Typ produktu",
-          "customerGroup": "Grupa klientów"
+          "customerGroup": "Grupa klientów",
+          "shippingOption": "Opcja wysyłki"
         },
         "modal": {
           "header": "Dodaj cele"
@@ -2063,8 +2071,18 @@
           "description": "Który klient może skorzystać z kodu promocyjnego? Kod promocyjny może być używany przez wszystkich klientów, jeśli pozostanie nietknięty."
         },
         "target-rules": {
-          "title": "Na jakie artykuły będzie miała zastosowanie promocja?",
-          "description": "Promocja zostanie zastosowana do artykułów spełniających poniższe warunki."
+          "order": {
+            "title": "Do których produktów zostanie zastosowana promocja?",
+            "description": "Promocja zostanie zastosowana do produktów spełniających poniższe warunki."
+          },
+          "shipping_methods": {
+            "title": "Do których metod wysyłki zostanie zastosowana promocja?",
+            "description": "Promocja zostanie zastosowana do metod wysyłki spełniających poniższe warunki."
+          },
+          "items": {
+            "title": "Do których produktów zostanie zastosowana promocja?",
+            "description": "Promocja zostanie zastosowana do produktów spełniających poniższe warunki."
+          }
         },
         "buy-rules": {
           "title": "Co musi znaleźć się w koszyku, aby odblokować promocję?",
@@ -2189,7 +2207,8 @@
         "description": "Kod, który Twoi klienci wprowadzą podczas realizacji transakcji."
       },
       "value": {
-        "title": "Wartość promocyjna"
+        "title": "Wartość promocji",
+        "invalid": "Nieprawidłowa wartość promocji"
       },
       "value_type": {
         "fixed": {
@@ -2577,7 +2596,6 @@
       "createTaxRate": "Utwórz stawkę podatku",
       "createTaxRateHint": "Utwórz nową stawkę podatku dla regionu.",
       "deleteRateDescription": "Zamierzasz usunąć stawkę podatku {{name}}. Tej akcji nie można cofnąć.",
-      "editTaxRate": "Edytuj stawkę podatku",
       "editRateAction": "Edytuj stawkę",
       "editOverridesAction": "Edytuj zastąpienia",
       "editOverridesTitle": "Edytuj zmiany stawek podatku",
@@ -2968,12 +2986,14 @@
     "prices": "Ceny",
     "available": "Dostępny",
     "inStock": "W magazynie",
-    "added": "W dodatku",
+    "added": "Dodany",
     "removed": "Usunięty",
     "from": "Od",
     "to": "Do",
     "beaware": "Zwróć uwagę",
-    "loading": "Ładowanie"
+    "loading": "Ładowanie",
+    "selectValue": "Wybierz wartość",
+    "selectValues": "Wybierz wartości"
   },
   "fields": {
     "amount": "Kwota",
@@ -3001,6 +3021,8 @@
     "categories": "Kategorie",
     "shippingMethod": "Sposób wysyłki",
     "configurations": "Konfiguracje",
+    "enabledInStore": "Dostępne w sklepie",
+    "isReturn": "Zwrot",
     "conditions": "Warunki",
     "category": "Kategoria",
     "collection": "Kolekcja",
@@ -3036,6 +3058,7 @@
     "minutes": "Protokół",
     "totalRedemptions": "Całkowite wykupy",
     "countries": "Kraje",
+    "serviceZone": "Strefa obsługi",
     "paymentProviders": "Dostawcy płatności",
     "refundReason": "Powód zwrotu",
     "fulfillmentProviders": "Dostawcy realizacji",
@@ -3125,7 +3148,7 @@
     "minSubtotal": "Min. Suma częściowa",
     "maxSubtotal": "Maks. Suma częściowa",
     "shippingProfile": "Profil wysyłki",
-    "summary": "Streszczenie",
+    "summary": "Podsumowanie",
     "details": "Bliższe dane",
     "label": "Etykieta",
     "rate": "Wskaźnik",
@@ -3161,7 +3184,7 @@
     "minutes_few": "Minuty",
     "minutes_many": "Minut",
     "minutes_other": "Minut",
-    "seconds_one": "Sekund",
+    "seconds_one": "Sekunda",
     "seconds_few": "Sekundy",
     "seconds_many": "Sekund",
     "seconds_other": "Sekund"

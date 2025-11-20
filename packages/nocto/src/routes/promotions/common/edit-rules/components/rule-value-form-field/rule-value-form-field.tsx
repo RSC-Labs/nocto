@@ -5,6 +5,9 @@ import {
 } from "@medusajs/types"
 import { Input } from "@medusajs/ui"
 import { useWatch } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { useEffect } from "react"
+
 import { Form } from "../../../../../../components/common/form"
 import { Combobox } from "../../../../../../components/inputs/combobox"
 import { useStore } from "../../../../../../hooks/api"
@@ -51,6 +54,8 @@ export const RuleValueFormField = ({
   ruleType,
   applicationMethodTargetType,
 }: RuleValueFormFieldType) => {
+  const { t } = useTranslation()
+
   const attribute = attributes?.find(
     (attr) => attr.value === fieldRule.attribute
   )
@@ -81,6 +86,23 @@ export const RuleValueFormField = ({
     control: form.control,
     name: operator,
   })
+
+  useEffect(() => {
+    const hasDirtyRules = Object.keys(form.formState.dirtyFields).length > 0
+
+    /**
+     * Don't reset values if fileds didn't change - this is to prevent reset of form on initial render when editing an existing rule
+     */
+    if (!hasDirtyRules) {
+      return
+    }
+
+    if (watchOperator === "eq") {
+      form.setValue(name, "")
+    } else {
+      form.setValue(name, [])
+    }
+  }, [watchOperator])
 
   return (
     <Form.Field
@@ -126,11 +148,13 @@ export const RuleValueFormField = ({
                 <Combobox
                   {...field}
                   {...comboboxData}
-                  multiple={watchOperator !== "eq"}
                   ref={ref}
                   placeholder={
-                    watchOperator === "eq" ? "Select Value" : "Select Values"
+                    watchOperator === "eq"
+                      ? t("labels.selectValue")
+                      : t("labels.selectValues")
                   }
+                  disabled={!watchOperator}
                   onChange={onChange}
                 />
               </Form.Control>

@@ -1,6 +1,7 @@
 const formatter = new Intl.NumberFormat([], {
   style: "percent",
   minimumFractionDigits: 2,
+  maximumFractionDigits: 4,
 })
 
 /**

@@ -28,7 +28,9 @@ export const useDeleteShippingOptionTypeAction = (
 
     await mutateAsync(undefined, {
       onSuccess: () => {
-        navigate("/settings/shipping-option-types", { replace: true })
+        navigate("/settings/locations/shipping-option-types", {
+          replace: true,
+        })
         toast.success(t("shippingOptionTypes.delete.successToast", { label }))
       },
       onError: (e) => {

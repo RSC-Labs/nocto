@@ -31,7 +31,7 @@ function AppUser({ plugins = [], rbac}: AppProps) {
   const { user, isLoading } = useMe();
 
   return (
-    <NoctoRbacProvider user={user} isLoading={isLoading}>
+    <NoctoRbacProvider user={user} isLoading={isLoading} rbac={rbac}>
       <NoctoPluginProvider>
         <Dashboard plugins={plugins} />
       </NoctoPluginProvider>
@@ -61,14 +61,11 @@ function App({ plugins = [], noctoConfig, rbac }: AppProps) {
     </div>
   }
 
-  // if (noctoConfig) await loadBuiltInPlugins(noctoConfig)
-
   return (
     <QueryClientProvider client={queryClient}>
       <AppUser plugins={plugins} rbac={rbac}/>
     </QueryClientProvider>
   )
-
 }
 
 export default App

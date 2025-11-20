@@ -5,23 +5,25 @@ import { useTranslation } from "react-i18next"
 import { _DataTable } from "../../../../../components/table/data-table/data-table"
 import { useOrders } from "../../../../../hooks/api/orders"
 import { useOrderTableColumns } from "../../../../../hooks/table/columns/use-order-table-columns"
-import { useOrderTableFilters } from "../../../../../hooks/table/filters/use-order-table-filters"
+import { useOrderTableFilters } from "./use-order-table-filters"
 import { useOrderTableQuery } from "../../../../../hooks/table/query/use-order-table-query"
 import { useDataTable } from "../../../../../hooks/use-data-table"
+import { useFeatureFlag } from "../../../../../providers/feature-flag-provider"
+import { ConfigurableOrderListTable } from "./configurable-order-list-table"
+
 import { DEFAULT_FIELDS } from "../../const"
-import * as z from "zod"
-import { useNoctoPluginContext } from "@rsc-labs/nocto-plugin-system"
 
 const PAGE_SIZE = 20
 
-const ConfigSchema = z.object({
-  excludeColumns: z.array(z.string()).optional()
-})
-
-type ConfigData = z.infer<typeof ConfigSchema>;
-
 export const OrderListTable = () => {
   const { t } = useTranslation()
+  const isViewConfigEnabled = useFeatureFlag("view_configurations")
+
+  // If feature flag is enabled, use the new configurable table
+  if (isViewConfigEnabled) {
+    return <ConfigurableOrderListTable />
+  }
+
   const { searchParams, raw } = useOrderTableQuery({
     pageSize: PAGE_SIZE,
   })
@@ -36,14 +38,8 @@ export const OrderListTable = () => {
     }
   )
 
-  const { pluginConfigRegistry } = useNoctoPluginContext()
-  
-  const config = pluginConfigRegistry.get<ConfigData>("@orders");
-
   const filters = useOrderTableFilters()
-  const columns = useOrderTableColumns({
-    exclude: config && config.excludeColumns
-  })
+  const columns = useOrderTableColumns({})
 
   const { table } = useDataTable({
     data: orders ?? [],

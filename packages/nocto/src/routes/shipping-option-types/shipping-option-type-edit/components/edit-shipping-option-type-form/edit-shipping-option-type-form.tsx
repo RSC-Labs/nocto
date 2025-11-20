@@ -49,7 +49,7 @@ export const EditShippingOptionTypeForm = ({
         onSuccess: ({ shipping_option_type }) => {
           toast.success(
             t("shippingOptionTypes.edit.successToast", {
-              value: shipping_option_type.label,
+              label: shipping_option_type.label,
             })
           )
           handleSuccess()

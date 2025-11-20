@@ -25,7 +25,7 @@ export const ShippingOptionTypeRowActions = ({
             {
               label: t("actions.edit"),
               icon: <PencilSquare />,
-              to: `/settings/shipping-option-types/${shippingOptionType.id}/edit`,
+              to: `/settings/locations/shipping-option-types/${shippingOptionType.id}/edit`,
             },
           ],
         },

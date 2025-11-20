@@ -342,7 +342,7 @@ const ConditionalPriceItem = ({
                         onValueChange={(_value, _name, values) =>
                           onChange(values?.value ? values?.value : "")
                         }
-                        autoFocus
+                        autoFocus={false}
                         {...props}
                       />
                     </Form.Control>

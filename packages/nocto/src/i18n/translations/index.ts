@@ -10,6 +10,7 @@ import it from "./it.json"
 import ja from "./ja.json"
 import pl from "./pl.json"
 import ptBR from "./ptBR.json"
+import ptPT from "./ptPT.json"
 import th from "./th.json"
 import tr from "./tr.json"
 import uk from "./uk.json"
@@ -66,6 +67,9 @@ export default {
   },
   ptBR: {
     translation: ptBR,
+  },
+  ptPT: {
+    translation: ptPT,
   },
   th: {
     translation: th,

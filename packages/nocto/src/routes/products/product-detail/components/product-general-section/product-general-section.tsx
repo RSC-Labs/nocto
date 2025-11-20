@@ -1,6 +1,6 @@
 import { PencilSquare, Trash } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
-import { Container, Heading, StatusBadge, usePrompt } from "@medusajs/ui"
+import { Container, Heading, StatusBadge, toast, usePrompt } from "@medusajs/ui"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
@@ -58,6 +58,11 @@ export const ProductGeneralSection = ({
       onSuccess: () => {
         navigate("..")
       },
+      onError: (e) => {
+        toast.error(t("products.toasts.delete.error.header"), {
+          description: e.message,
+        })
+      },
     })
   }
 
@@ -97,6 +102,7 @@ export const ProductGeneralSection = ({
       <SectionRow title={t("fields.description")} value={product.description} />
       <SectionRow title={t("fields.subtitle")} value={product.subtitle} />
       <SectionRow title={t("fields.handle")} value={`/${product.handle}`} />
+      <SectionRow title={t("fields.material")} value={product.material} />
       <SectionRow
         title={t("fields.discountable")}
         value={product.discountable ? t("fields.true") : t("fields.false")}

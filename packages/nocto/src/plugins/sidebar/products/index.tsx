@@ -134,6 +134,14 @@ export const sidebarProducts = {
                     import("../../../routes/products/product-media"),
                 },
                 {
+                  path: "images/:image_id/variants",
+                  layout: "main",
+                  lazy: () =>
+                    import(
+                      "../../../routes/products/product-image-variants-edit"
+                    ),
+                },
+                {
                   path: "prices",
                   layout: "main",
                   lazy: () =>
@@ -215,6 +223,14 @@ export const sidebarProducts = {
                   lazy: () =>
                     import(
                       "../../../routes/product-variants/product-variant-manage-inventory-items"
+                    ),
+                },
+                {
+                  path: "media",
+                  layout: "main",
+                  lazy: () =>
+                    import(
+                      "../../../routes/product-variants/product-variant-media"
                     ),
                 },
                 {

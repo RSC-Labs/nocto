@@ -1,6 +1,6 @@
 import { EllipseMiniSolid } from "@medusajs/icons"
 import { DatePicker, Text, clx } from "@medusajs/ui"
-import isEqual from "lodash/isEqual"
+import isEqual from "lodash.isequal"
 import { Popover as RadixPopover } from "radix-ui"
 import { useMemo, useState } from "react"
 
@@ -69,12 +69,19 @@ export const DateFilter = ({
 
   const handleCustomDateChange = (value: Date | null, pos: "start" | "end") => {
     const key = pos === "start" ? "$gte" : "$lte"
-    const dateValue = value ? value.toISOString() : undefined
+
+    let dateValue = value
+
+    // offset to the end of the day so the results include the selected end date
+    if (key === "$lte" && value) {
+      dateValue = new Date(value.getTime())
+      dateValue.setHours(23, 59, 59, 999)
+    }
 
     selectedParams.add(
       JSON.stringify({
         ...(currentDateComparison || {}),
-        [key]: dateValue,
+        [key]: dateValue?.toISOString(),
       })
     )
   }
@@ -306,5 +313,16 @@ const getDateFromComparison = (
   comparison: DateComparisonOperator | null,
   key: "$gte" | "$lte"
 ) => {
-  return comparison?.[key] ? new Date(comparison[key] as string) : undefined
+  if (!comparison?.[key]) {
+    return undefined
+  }
+
+  const compareDate = new Date(comparison[key] as string)
+
+  if (key === "$lte") {
+    // offset back to the display date
+    compareDate.setHours(0, 0, 0, 0)
+  }
+
+  return compareDate
 }

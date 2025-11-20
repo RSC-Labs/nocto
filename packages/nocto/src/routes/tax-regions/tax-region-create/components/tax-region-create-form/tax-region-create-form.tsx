@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { InformationCircleSolid } from "@medusajs/icons"
-import { Button, Heading, Input, Text, Tooltip, toast } from "@medusajs/ui"
+import { Button, Heading, Input, Text, toast, Tooltip } from "@medusajs/ui"
 import { useTranslation } from "react-i18next"
 import { Form } from "../../../../../components/common/form"
 import { CountrySelect } from "../../../../../components/inputs/country-select"
@@ -221,6 +221,7 @@ export const TaxRegionCreateForm = ({ parentId }: TaxRegionCreateFormProps) => {
                               <PercentageInput
                                 {...field}
                                 value={value?.value}
+                                decimalsLimit={4}
                                 onValueChange={(value, _name, values) =>
                                   onChange({
                                     value: value,

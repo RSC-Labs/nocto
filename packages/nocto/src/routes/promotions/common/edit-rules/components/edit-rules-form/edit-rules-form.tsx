@@ -53,6 +53,7 @@ export const EditRulesForm = ({
             setRulesToRemove={setRulesToRemove}
             rulesToRemove={rulesToRemove}
             promotion={promotion}
+            formType="edit"
           />
         </RouteDrawer.Body>
 
