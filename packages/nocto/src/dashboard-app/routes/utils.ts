@@ -1,4 +1,4 @@
-import { ComponentType } from "react"
+import React, { ComponentType } from "react"
 import { LoaderFunction, RouteObject } from "react-router-dom"
 import { ErrorBoundary } from "../../components/utilities/error-boundary"
 import { RouteExtension, RouteModule } from "../types"
@@ -227,6 +227,9 @@ export function mapPluginRoutes(routes: RouteEntry[]): RouteObject[] {
     lazy: r.lazy,
     handle: r.handle,
     errorElement: r.errorElement,
+    element:
+      r.element ??
+      (r.Component ? React.createElement(r.Component) : undefined),
     children: r.children ? mapPluginRoutes(r.children) : undefined,
   }))
 }

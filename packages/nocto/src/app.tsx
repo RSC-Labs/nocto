@@ -5,6 +5,8 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import { queryClient } from "./lib/query-client"
 import { useMe } from "./hooks/api"
 import { NoctoPluginProvider, NoctoRbacProvider, NoctoConfig } from "@rsc-labs/nocto-plugin-system"
+import { useEffect, useState } from "react"
+import { Spinner } from "@medusajs/icons"
 
 interface AppProps {
   plugins?: DashboardPlugin[]
@@ -29,7 +31,7 @@ function AppUser({ plugins = [], rbac}: AppProps) {
   const { user, isLoading } = useMe();
 
   return (
-    <NoctoRbacProvider user={user} isLoading={isLoading} rbac={rbac}>
+    <NoctoRbacProvider user={user} isLoading={isLoading}>
       <NoctoPluginProvider>
         <Dashboard plugins={plugins} />
       </NoctoPluginProvider>
@@ -40,7 +42,26 @@ function AppUser({ plugins = [], rbac}: AppProps) {
 
 function App({ plugins = [], noctoConfig, rbac }: AppProps) {
 
-  if (noctoConfig) loadBuiltInPlugins(noctoConfig)
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    const initializePlugins = async () => {
+      if (noctoConfig) {
+        await loadBuiltInPlugins(noctoConfig);
+      }
+      setIsInitialized(true);
+    };
+
+    initializePlugins();
+  }, [noctoConfig]);
+
+  if (!isInitialized) {
+    <div className="flex min-h-screen items-center justify-center">
+      <Spinner className="text-ui-fg-interactive animate-spin" />
+    </div>
+  }
+
+  // if (noctoConfig) await loadBuiltInPlugins(noctoConfig)
 
   return (
     <QueryClientProvider client={queryClient}>
