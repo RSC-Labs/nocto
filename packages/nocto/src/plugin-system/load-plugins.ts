@@ -151,5 +151,5 @@ export async function loadBuiltInPlugins(noctoConfig: NoctoConfig) {
     }
   }
 
-  await loadNpmPlugins(noctoConfig)
+  // await loadNpmPlugins(noctoConfig)
 }

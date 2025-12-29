@@ -906,88 +906,88 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@medusajs/admin-shared@npm:2.11.3":
-  version: 2.11.3
-  resolution: "@medusajs/admin-shared@npm:2.11.3"
-  checksum: 685a7f49cc988148018dfb63edd278935b79687126008ff71e46699b1ce2b4ac4812348545eef2db06a710c53584e9c53f3d332715ce09ea7c836f414e0d1a22
+"@medusajs/admin-shared@npm:2.12.3":
+  version: 2.12.3
+  resolution: "@medusajs/admin-shared@npm:2.12.3"
+  checksum: df010c0fb4cc7ada2e5437abd69f46f9ad2cc6f4167200fbb10b8a6cec7f07166ea86dabfbcfaa2c312c5b5b1cea6a71742adca62f2d5cf086a0a4a6601303d2
   languageName: node
   linkType: hard
 
-"@medusajs/admin-vite-plugin@npm:2.11.3":
-  version: 2.11.3
-  resolution: "@medusajs/admin-vite-plugin@npm:2.11.3"
+"@medusajs/admin-vite-plugin@npm:2.12.3":
+  version: 2.12.3
+  resolution: "@medusajs/admin-vite-plugin@npm:2.12.3"
   dependencies:
     "@babel/parser": 7.25.6
     "@babel/traverse": 7.25.6
     "@babel/types": 7.25.6
-    "@medusajs/admin-shared": 2.11.3
+    "@medusajs/admin-shared": 2.12.3
     chokidar: ^3.5.3
     fdir: 6.1.1
     magic-string: 0.30.5
     outdent: ^0.8.0
     picocolors: ^1.1.0
   peerDependencies:
-    vite: ^5.4.14
-  checksum: 87b7b07d645353c60b256726103b4855c3f247a0fd231fbb2a3e73388c0fc334fd2c817bbe5cbef9e7b292797dc589c86beb01a18c9af81025441d7b942ee500
+    vite: ^5.4.21
+  checksum: a5fcdeae81fa35a999c46e9a72be79d5cfd629c2815c76825c058025cd6a8a1e82384f7b9b1e33ff6daf12fae6a6bf2f944432810104adab300bc25414dfb022
   languageName: node
   linkType: hard
 
-"@medusajs/icons@npm:2.11.3":
-  version: 2.11.3
-  resolution: "@medusajs/icons@npm:2.11.3"
+"@medusajs/icons@npm:2.12.3":
+  version: 2.12.3
+  resolution: "@medusajs/icons@npm:2.12.3"
   peerDependencies:
     react: ^18.3.1
-  checksum: 87af46709ee54dc2c56df287d4ade469fe4570681067b8fe5ce41f4e53bfb50d58c081b903d4984471fd62e0dfd1259918422f31c88ff3f9019ed87e83bfa837
+  checksum: a4e189bb3ab6ec24f2d48914905662d89fa9c01420143e2d39ef6d7fe93e361e056340408af8c802d5e80cfb9571040dfb24843b7afc04504b544c86f948834f
   languageName: node
   linkType: hard
 
-"@medusajs/js-sdk@npm:2.11.3":
-  version: 2.11.3
-  resolution: "@medusajs/js-sdk@npm:2.11.3"
+"@medusajs/js-sdk@npm:2.12.3":
+  version: 2.12.3
+  resolution: "@medusajs/js-sdk@npm:2.12.3"
   dependencies:
     fetch-event-stream: ^0.1.5
     qs: ^6.12.1
-  checksum: 6077287eddb55b991e9cc5f37d2785a5d19a7004b1d1b210ed7414965c93a57464649351e1f7288804624dcfcce546f6c109447d2d70a9c8b643beaba1d66c7b
+  checksum: f6e58efa57c2dd079dc6e66d1b2d5c89fc1e0e20a6a4e38019383d25df20401541755a634cd271e7afc6fd5e679d025390b98c4639ec5407e9703178554e4607
   languageName: node
   linkType: hard
 
-"@medusajs/types@npm:2.11.3":
-  version: 2.11.3
-  resolution: "@medusajs/types@npm:2.11.3"
+"@medusajs/types@npm:2.12.3":
+  version: 2.12.3
+  resolution: "@medusajs/types@npm:2.12.3"
   dependencies:
     bignumber.js: ^9.1.2
   peerDependencies:
     ioredis: ^5.4.1
-    vite: ^5.4.14
+    vite: ^5.4.21
   peerDependenciesMeta:
     ioredis:
       optional: true
     vite:
       optional: true
-  checksum: 153441c6f382e1a8c8182a136a9ddccafcf2b882974f53e86d2092e8e7c7b0ebeaa132a9c1f352cdc4382907c96b6f66446cc645a8e8aa1e6ccb8ec7fa3b7fe2
+  checksum: 8569c9a7f7a411bb10fb210010d25b08ab32b5b688413ba152306f5cb1fbaa74cf5324cbba1251710cbc491fec374225ea8dd7b7b5d39c48fc6cae48df445876
   languageName: node
   linkType: hard
 
-"@medusajs/ui-preset@npm:2.11.3":
-  version: 2.11.3
-  resolution: "@medusajs/ui-preset@npm:2.11.3"
+"@medusajs/ui-preset@npm:2.12.3":
+  version: 2.12.3
+  resolution: "@medusajs/ui-preset@npm:2.12.3"
   dependencies:
     "@tailwindcss/forms": ^0.5.3
     tailwindcss-animate: ^1.0.6
   peerDependencies:
     tailwindcss: ^3.4.3
-  checksum: 13c9530613b24c5a8c36e26023674e46633fc6c4cbef6747132c4dcfc25306089a6b6e4aff26a5e36df480002d01e9b2d670a24293b5462966a9b7f29c7dd177
+  checksum: 9605420fa2a35a862c4c1bf13235805bd0ae5aed75171e7d8ecfe31d79b1b13af613471e2d84074395158d89e361844463e70d46e0efe463787a289fd41f8feb
   languageName: node
   linkType: hard
 
-"@medusajs/ui@npm:4.0.27":
-  version: 4.0.27
-  resolution: "@medusajs/ui@npm:4.0.27"
+"@medusajs/ui@npm:4.0.31":
+  version: 4.0.31
+  resolution: "@medusajs/ui@npm:4.0.31"
   dependencies:
     "@dnd-kit/core": ^6.1.0
     "@dnd-kit/sortable": ^8.0.0
     "@dnd-kit/utilities": ^3.2.2
-    "@medusajs/icons": 2.11.3
+    "@medusajs/icons": 2.12.3
     "@radix-ui/react-dialog": 1.1.4
     "@radix-ui/react-dismissable-layer": 1.1.4
     "@tanstack/react-table": 8.20.5
@@ -1005,7 +1005,7 @@ __metadata:
   peerDependencies:
     react: ^18.3.1
     react-dom: ^18.3.1
-  checksum: 694e5417d3fa18fba66350dd461102e3ad461f992ac486102c898a0ecb24b510211e4e7d9591de13d36c6679156152c9245bef36c86da30c84d88798d2e80c32
+  checksum: 982dd0ab784b50f9eb216d072163718ba1a8966474a8d8b1e14137e5006011dfe6e06d9913df0640132c576528449aa44aa5059707313ed19574729bc516ef74
   languageName: node
   linkType: hard
 
@@ -4292,13 +4292,13 @@ __metadata:
     "@dnd-kit/utilities": ^3.2.2
     "@hookform/error-message": ^2.0.1
     "@hookform/resolvers": 3.4.2
-    "@medusajs/admin-shared": 2.11.3
-    "@medusajs/admin-vite-plugin": 2.11.3
-    "@medusajs/icons": 2.11.3
-    "@medusajs/js-sdk": 2.11.3
-    "@medusajs/types": 2.11.3
-    "@medusajs/ui": 4.0.27
-    "@medusajs/ui-preset": 2.11.3
+    "@medusajs/admin-shared": 2.12.3
+    "@medusajs/admin-vite-plugin": 2.12.3
+    "@medusajs/icons": 2.12.3
+    "@medusajs/js-sdk": 2.12.3
+    "@medusajs/types": 2.12.3
+    "@medusajs/ui": 4.0.31
+    "@medusajs/ui-preset": 2.12.3
     "@radix-ui/react-dialog": 1.1.4
     "@radix-ui/react-dismissable-layer": 1.1.4
     "@rsc-labs/nocto-plugin-system": ^0.1.5

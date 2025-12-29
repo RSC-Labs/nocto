@@ -1,18 +1,12 @@
 import {
   BuildingStorefront,
-  Buildings,
   ChevronDownMini,
   CogSixTooth,
-  CurrencyDollar,
   EllipsisHorizontal,
   MagnifyingGlass,
   MinusMini,
   OpenRectArrowOut,
-  ReceiptPercent,
-  ShoppingCart,
   SquaresPlus,
-  Tag,
-  Users,
 } from "@medusajs/icons"
 import { Avatar, Divider, DropdownMenu, Text, clx } from "@medusajs/ui"
 import { Collapsible as RadixCollapsible } from "radix-ui"
@@ -20,7 +14,6 @@ import { useTranslation } from "react-i18next"
 
 import { useStore } from "../../../hooks/api/store"
 import { Skeleton } from "../../common/skeleton"
-import { INavItem, NavItem } from "../../layout/nav-item"
 import { Shell } from "../../layout/shell"
 
 import { Link, useLocation, useNavigate } from "react-router-dom"
@@ -29,7 +22,9 @@ import { queryClient } from "../../../lib/query-client"
 import { useExtension } from "../../../providers/extension-provider"
 import { useSearch } from "../../../providers/search-provider"
 import { UserMenu } from "../user-menu"
-import { useDocumentDirection } from "../../../hooks/use-document-direction"
+
+import { NavItem } from "../nav-item"
+import { useNoctoPluginContext } from "@rsc-labs/nocto-plugin-system"
 
 export const MainLayout = () => {
   return (
@@ -51,7 +46,8 @@ const MainSidebar = () => {
         </div>
         <div className="flex flex-1 flex-col justify-between">
           <div className="flex flex-1 flex-col">
-            <CoreRouteSection />
+            <SearchBarSection />
+            <PluginSidebarSection />
             <ExtensionRouteSection />
           </div>
           <UtilitySection />
@@ -95,7 +91,7 @@ const Logout = () => {
 const Header = () => {
   const { t } = useTranslation()
   const { store, isPending, isError, error } = useStore()
-  const direction = useDocumentDirection()
+
   const name = store?.name
   const fallback = store?.name?.slice(0, 1).toUpperCase()
 
@@ -107,12 +103,11 @@ const Header = () => {
 
   return (
     <div className="w-full p-3">
-    <DropdownMenu
-          dir={direction}>
+      <DropdownMenu>
         <DropdownMenu.Trigger
           disabled={!isLoaded}
           className={clx(
-            "bg-ui-bg-subtle transition-fg grid w-full grid-cols-[24px_1fr_15px] items-center gap-x-3 rounded-md p-0.5 pe-2 outline-none",
+            "bg-ui-bg-subtle transition-fg grid w-full grid-cols-[24px_1fr_15px] items-center gap-x-3 rounded-md p-0.5 pr-2 outline-none",
             "hover:bg-ui-bg-subtle-hover",
             "data-[state=open]:bg-ui-bg-subtle-hover",
             "focus-visible:shadow-borders-focus"
@@ -123,7 +118,7 @@ const Header = () => {
           ) : (
             <Skeleton className="h-6 w-6 rounded-md" />
           )}
-          <div className="block overflow-hidden text-start">
+          <div className="block overflow-hidden text-left">
             {name ? (
               <Text
                 size="small"
@@ -177,83 +172,6 @@ const Header = () => {
   )
 }
 
-const useCoreRoutes = (): Omit<INavItem, "pathname">[] => {
-  const { t } = useTranslation()
-
-  return [
-    {
-      icon: <ShoppingCart />,
-      label: t("orders.domain"),
-      to: "/orders",
-      items: [
-        // TODO: Enable when domin is introduced
-        // {
-        //   label: t("draftOrders.domain"),
-        //   to: "/draft-orders",
-        // },
-      ],
-    },
-    {
-      icon: <Tag />,
-      label: t("products.domain"),
-      to: "/products",
-      items: [
-        {
-          label: t("collections.domain"),
-          to: "/collections",
-        },
-        {
-          label: t("categories.domain"),
-          to: "/categories",
-        },
-        // TODO: Enable when domin is introduced
-        // {
-        //   label: t("giftCards.domain"),
-        //   to: "/gift-cards",
-        // },
-      ],
-    },
-    {
-      icon: <Buildings />,
-      label: t("inventory.domain"),
-      to: "/inventory",
-      items: [
-        {
-          label: t("reservations.domain"),
-          to: "/reservations",
-        },
-      ],
-    },
-    {
-      icon: <Users />,
-      label: t("customers.domain"),
-      to: "/customers",
-      items: [
-        {
-          label: t("customerGroups.domain"),
-          to: "/customer-groups",
-        },
-      ],
-    },
-    {
-      icon: <ReceiptPercent />,
-      label: t("promotions.domain"),
-      to: "/promotions",
-      items: [
-        {
-          label: t("campaigns.domain"),
-          to: "/campaigns",
-        },
-      ],
-    },
-    {
-      icon: <CurrencyDollar />,
-      label: t("priceLists.domain"),
-      to: "/price-lists",
-    },
-  ]
-}
-
 const Searchbar = () => {
   const { t } = useTranslation()
   const { toggleSearch } = useSearch()
@@ -269,7 +187,7 @@ const Searchbar = () => {
         )}
       >
         <MagnifyingGlass />
-        <div className="flex-1 text-start">
+        <div className="flex-1 text-left">
           <Text size="small" leading="compact" weight="plus">
             {t("app.search.label")}
           </Text>
@@ -282,28 +200,38 @@ const Searchbar = () => {
   )
 }
 
-const CoreRouteSection = () => {
-  const coreRoutes = useCoreRoutes()
+const PluginSidebarSection = () => {
+  const { sidebarItems } = useNoctoPluginContext()
 
-  const { getMenu } = useExtension()
-
-  const menuItems = getMenu("coreExtensions")
-
-  menuItems.forEach((item) => {
-    if (item.nested) {
-      const route = coreRoutes.find((route) => route.to === item.nested)
-      if (route) {
-        route.items?.push(item)
-      }
-    }
-  })
+  if (sidebarItems.length === 0) return null
 
   return (
     <nav className="flex flex-col gap-y-1 py-3">
-      <Searchbar />
-      {coreRoutes.map((route) => {
-        return <NavItem key={route.to} {...route} />
+      {sidebarItems.map((item) => {
+        const Icon = item.icon
+        return (
+          <NavItem
+            key={item.path}
+            to={item.path}
+            label={item.label}
+            icon={Icon ? <Icon /> : undefined}
+            items={
+              item.items?.map(nestedItem => ({
+                to: nestedItem.path,
+                label: nestedItem.label,
+              })) ?? []
+            }
+          />
+        )
       })}
+    </nav>
+  )
+}
+
+const SearchBarSection = () => {
+  return (
+    <nav className="flex flex-col gap-y-1 py-3">
+      <Searchbar />
     </nav>
   )
 }
@@ -348,7 +276,6 @@ const ExtensionRouteSection = () => {
                     label={item.label}
                     icon={item.icon ? item.icon : <SquaresPlus />}
                     items={item.items}
-                    translationNs={item.translationNs}
                     type="extension"
                   />
                 )

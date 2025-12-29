@@ -58,6 +58,7 @@ const defaultValues = {
   status: "draft" as PromotionStatusValues,
   rules: [],
   is_tax_inclusive: false,
+  limit: undefined,
   application_method: {
     allocation: "each" as ApplicationMethodAllocationValues,
     type: "fixed" as ApplicationMethodTypeValues,
@@ -901,7 +902,9 @@ export const CreatePromotionForm = () => {
                           return (
                             <Form.Item>
                               <Form.Label
-                                tooltip={t("promotions.fields.allocationTooltip")}
+                                tooltip={t(
+                                  "promotions.fields.allocationTooltip"
+                                )}
                               >
                                 {t("promotions.fields.allocation")}
                               </Form.Label>
@@ -987,6 +990,42 @@ export const CreatePromotionForm = () => {
                       />
                     </>
                   )}
+
+                  <Divider />
+                  <Form.Field
+                    control={form.control}
+                    name="limit"
+                    render={({ field: { onChange, value, ...field } }) => {
+                      return (
+                        <Form.Item className="basis-1/2">
+                          <Form.Label>
+                            {t("promotions.form.limit.title")}
+                          </Form.Label>
+                          <Form.Control>
+                            <Input
+                              {...field}
+                              type="number"
+                              min={1}
+                              value={value ?? ""}
+                              onChange={(e) => {
+                                const val = e.target.value
+                                onChange(val === "" ? null : parseInt(val, 10))
+                              }}
+                              placeholder="100"
+                            />
+                          </Form.Control>
+                          <Text
+                            size="small"
+                            leading="compact"
+                            className="text-ui-fg-subtle"
+                          >
+                            {t("promotions.form.limit.description")}
+                          </Text>
+                          <Form.ErrorMessage />
+                        </Form.Item>
+                      )
+                    }}
+                  />
                 </div>
               </div>
             </ProgressTabs.Content>

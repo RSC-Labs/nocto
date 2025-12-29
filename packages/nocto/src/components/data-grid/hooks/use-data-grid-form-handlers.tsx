@@ -228,6 +228,7 @@ export function convertArrayToPrimitive(
     case "boolean":
       return values.map(convertToBoolean)
     case "text":
+    case "multiline-text":
       return values.map(covertToString)
     default:
       throw new Error(`Unsupported target type "${type}".`)

@@ -11,6 +11,7 @@
     "apply": "Apply",
     "range": "Range",
     "search": "Search",
+    "original": "Original",
     "of": "of",
     "results": "results",
     "pages": "pages",
@@ -33,6 +34,7 @@
     "modified": "Modified",
     "added": "Added",
     "removed": "Removed",
+    "remaining": "Left",
     "admin": "Admin",
     "store": "Store",
     "details": "Details",
@@ -99,7 +101,9 @@
   },
   "actions": {
     "save": "Save",
+    "saveChanges": "Save changes",
     "saveAsDraft": "Save as draft",
+    "saveAndClose": "Save and close",
     "copy": "Copy",
     "copied": "Copied",
     "duplicate": "Duplicate",
@@ -1080,6 +1084,18 @@
     "list": {
       "noRecordsMessage": "Your orders will show up here."
     },
+    "export": {
+      "header": "Export Order List",
+      "description": "Export the order list to a CSV file.",
+      "success": {
+        "title": "Export started",
+        "description": "You will be notified when the export is ready."
+      },
+      "filters": {
+        "title": "Filters",
+        "description": "The following filters will be applied to the export."
+      }
+    },
     "status": {
       "not_paid": "Not paid",
       "pending": "Pending",
@@ -1305,6 +1321,9 @@
       "outboundShipping": "Outbound shipping",
       "outboundShippingHint": "Choose which method you want to use.",
       "refundAmount": "Estimated difference",
+      "carryOverPromotion": "Carry over promotions",
+      "carryOverPromotionHint": "Apply the order's promotions to the exchange items",
+      "carryOverPromotionTooltip": "Only fixed type promotions with EACH allocation and percentage type promotions with EACH or ACROSS allocation can be carried over to outbound exchange items.",
       "activeChangeError": "There is an active order change on this order. Please finish or discard the previous change.",
       "actions": {
         "cancelExchange": {
@@ -2048,6 +2067,8 @@
       "addCondition": "Add condition",
       "clearAll": "Clear all",
       "taxInclusive": "Tax Inclusive",
+      "usageLimit": "Usage Limit",
+      "usage": "Usage",
       "amount": {
         "tooltip": "Select the currency code to enable setting the amount"
       },
@@ -2209,6 +2230,10 @@
           "title": "Percentage",
           "description": "The percentage to discount off the amount. eg. 8%"
         }
+      },
+      "limit": {
+        "title": "Usage Limit",
+        "description": "Maximum number of times this promotion can be used across all orders. Leave empty for unlimited usage."
       }
     },
     "deleteWarning": "You are about to delete the promotion {{code}}. This action cannot be undone.",
@@ -2483,31 +2508,71 @@
     "deleteUserSuccess": "User {{name}} deleted successfully",
     "invite": "Invite"
   },
+  "translations": {
+    "domain": "Translations",
+    "actions": {
+      "manage": "Manage translations",
+      "manageLocales": "Manage locales"
+    },
+    "subtitle": "Manage translations of your data in Medusa",
+    "list": {
+      "metrics": "{{translated}} of {{total}} fields translated"
+    },
+    "edit": {
+      "successToast": "Translations updated successfully",
+      "unsavedChanges": {
+        "title": "Unsaved translations",
+        "description": "Don't lose your work. You have changes that haven't been saved yet"
+      }
+    },
+    "bulk": {
+      "header": "Translations Bulk Editor",
+      "mainColumn": "Locale"
+    },
+    "activeLocales": {
+      "heading": "Languages",
+      "subtitle": "Activated translations",
+      "noLocalesTip": "Configure at least one locale to start translating your data"
+    },
+    "completion": {
+      "heading": "Translated fields",
+      "translated": "Translated",
+      "toTranslate": "Missing",
+      "footer": "Languages"
+    }
+  },
   "store": {
     "domain": "Store",
     "manageYourStoresDetails": "Manage your store's details",
     "editStore": "Edit store",
     "defaultCurrency": "Default currency",
+    "defaultLocale": "Default locale",
     "defaultRegion": "Default region",
     "defaultSalesChannel": "Default sales channel",
     "defaultLocation": "Default location",
     "swapLinkTemplate": "Swap link template",
     "paymentLinkTemplate": "Payment link template",
     "inviteLinkTemplate": "Invite link template",
+    "locales": "Locales",
     "currencies": "Currencies",
     "addCurrencies": "Add currencies",
     "enableTaxInclusivePricing": "Enable tax inclusive pricing",
     "disableTaxInclusivePricing": "Disable tax inclusive pricing",
     "removeCurrencyWarning_one": "You are about to remove {{count}} currency from your store. Ensure that you have removed all prices using the currency before proceeding.",
     "removeCurrencyWarning_other": "You are about to remove {{count}} currencies from your store. Ensure that you have removed all prices using the currencies before proceeding.",
+    "removeLocaleWarning_one": "You are about to remove {{count}} locale from your store. Any translation using this locale will be removed.",
+    "removeLocaleWarning_other": "You are about to remove {{count}} locales from your store. Any translation using these locales will be removed.",
     "currencyAlreadyAdded": "The currency has already been added to your store.",
+    "localeAlreadyAdded": "The locale has already been added to your store.",
     "edit": {
       "header": "Edit Store"
     },
     "toast": {
       "update": "Store successfully updated",
       "currenciesUpdated": "Currencies updated successfully",
+      "localesUpdated": "Locales updated successfully",
       "currenciesRemoved": "Removed currencies from the store successfully",
+      "localesRemoved": "Removed locales from the store successfully",
       "updatedTaxInclusivitySuccessfully": "Tax inclusive pricing updated successfully"
     }
   },
